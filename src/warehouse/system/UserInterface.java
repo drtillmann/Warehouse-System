@@ -11,7 +11,6 @@ package warehouse.system;
  * @author drtil
  */
 import LibraryCode.Stage1.Book;
-import LibraryCode.Stage1.Library;
 import LibraryCode.Stage1.Member;
 import java.util.*;
 import java.text.*;
@@ -21,7 +20,7 @@ public class UserInterface {
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   
   //TODO - CHANGE TO WAREHOUSE
-  private static Library library;
+  private static Warehouse warehouse;
   
   private static final int EXIT = 0;
   private static final int ADD_CLIENT = 1;
@@ -44,7 +43,7 @@ public class UserInterface {
     if (yesOrNo("Look for saved data and  use it?")) {
       retrieve();
     } else {
-      library = Library.instance();
+      warehouse = Warehouse.instance();
     }
   }
   public static UserInterface instance() {
@@ -137,7 +136,7 @@ public class UserInterface {
     String address = getToken("Enter address");
     String phone = getToken("Enter phone");
     Member result;
-    result = library.addMember(name, address, phone);
+    result = warehouse.addMember(name, address, phone);
     if (result == null) {
       System.out.println("Could not add client");
     }
@@ -150,7 +149,7 @@ public class UserInterface {
       String title = getToken("Enter Product name");
       String bookID = getToken("Enter id");
       String author = getToken("Enter author");
-      result = library.addProduct(title, author, bookID);
+      result = warehouse.addProduct(title, author, bookID);
       if (result != null) {
         System.out.println(result);
       } else {
@@ -171,7 +170,7 @@ public class UserInterface {
   }
 */
   public void showProducts() {
-      Iterator allBooks = library.getBooks();
+      Iterator allBooks = warehouse.getBooks();
       while (allBooks.hasNext()){
 	  Book book = (Book)(allBooks.next());
           System.out.println(book.toString());
@@ -179,7 +178,7 @@ public class UserInterface {
   }
 
   public void showClients() {
-      Iterator allMembers = library.getMembers();
+      Iterator allMembers = warehouse.getMembers();
       while (allMembers.hasNext()){
 	  Member member = (Member)(allMembers.next());
           System.out.println(member.toString());
@@ -207,7 +206,7 @@ public class UserInterface {
       System.out.println("Dummy Action");   
   }
   private void save() {
-    if (library.save()) {
+    if (warehouse.save()) {
       System.out.println(" The library has been successfully saved in the file LibraryData \n" );
     } else {
       System.out.println(" There has been an error in saving \n" );
@@ -215,13 +214,13 @@ public class UserInterface {
   }
   private void retrieve() {
     try {
-      Library tempLibrary = Library.retrieve();
-      if (tempLibrary != null) {
+      Warehouse tempWarehouse = Warehouse.retrieve();
+      if (tempWarehouse != null) {
         System.out.println(" The library has been successfully retrieved from the file LibraryData \n" );
-        library = tempLibrary;
+        warehouse = tempWarehouse;
       } else {
         System.out.println("File doesnt exist; creating new library" );
-        library = Library.instance();
+        warehouse = Warehouse.instance();
       }
     } catch(Exception cnfe) {
       cnfe.printStackTrace();
