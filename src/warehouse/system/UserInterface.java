@@ -26,7 +26,7 @@ public class UserInterface {
   private static final int EXIT = 0;
   private static final int ADD_CLIENT = 1;
   private static final int ADD_PRODUCT = 2;
-  private static final int ISSUE_BOOKS = 3;
+  private static final int PLACE_ORDER = 3;
   //private static final int RETURN_BOOKS = 4;
   //private static final int RENEW_BOOKS = 5;
   //private static final int REMOVE_BOOKS = 6;
@@ -117,7 +117,7 @@ public class UserInterface {
     System.out.println(EXIT + " to Exit\n");
     System.out.println(ADD_CLIENT + " to add a member");
     System.out.println(ADD_PRODUCT + " to  add books");
-    System.out.println(ISSUE_BOOKS + " to  issue books to a  member");
+    System.out.println(PLACE_ORDER + " to  place a client's order ");
     //System.out.println(RETURN_BOOKS + " to  return books ");
     //System.out.println(RENEW_BOOKS + " to  renew books ");
     //System.out.println(REMOVE_BOOKS + " to  remove books");
@@ -161,10 +161,11 @@ public class UserInterface {
       }
     } while (true);
   }
-  /*
-  public void issueBooks() {
+  
+  public void placeOrder() {
          System.out.println("Dummy Action");
   }
+  /*
   public void renewBooks() {
       System.out.println("Dummy Action");
   }
@@ -235,7 +236,7 @@ public class UserInterface {
                                 break;
         case ADD_PRODUCT:       addProducts();
                                 break;
-        case ISSUE_BOOKS:       issueBooks();
+        case PLACE_ORDER:       placeOrder();
                                 break;
         /*
         case RETURN_BOOKS:      returnBooks();
