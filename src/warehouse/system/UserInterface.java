@@ -10,8 +10,7 @@ package warehouse.system;
  *
  * @author drtil
  */
-import LibraryCode.Stage1.Book;
-import LibraryCode.Stage1.Member;
+
 import java.util.*;
 import java.text.*;
 import java.io.*;
@@ -135,8 +134,8 @@ public class UserInterface {
     String name = getToken("Enter client name");
     String address = getToken("Enter address");
     String phone = getToken("Enter phone");
-    Member result;
-    result = warehouse.addMember(name, address, phone);
+    
+    Client result = warehouse.addClient(name, address, phone);
     if (result == null) {
       System.out.println("Could not add client");
     }
@@ -144,7 +143,7 @@ public class UserInterface {
   }
 
   public void addProducts() {
-    Book result;
+    Product result;
     do {
       String title = getToken("Enter Product name");
       String bookID = getToken("Enter id");
@@ -172,15 +171,15 @@ public class UserInterface {
   public void showProducts() {
       Iterator allBooks = warehouse.getBooks();
       while (allBooks.hasNext()){
-	  Book book = (Book)(allBooks.next());
-          System.out.println(book.toString());
+	  Product product = (Product)(allBooks.next());
+          System.out.println(product.toString());
       }
   }
 
   public void showClients() {
-      Iterator allMembers = warehouse.getMembers();
-      while (allMembers.hasNext()){
-	  Member member = (Member)(allMembers.next());
+      Iterator allClients = warehouse.getClients();
+      while (allClients.hasNext()){
+	  Client member = (Client)(allClients.next());
           System.out.println(member.toString());
       }
   }
@@ -207,7 +206,7 @@ public class UserInterface {
   }
   private void save() {
     if (warehouse.save()) {
-      System.out.println(" The library has been successfully saved in the file LibraryData \n" );
+      System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
     } else {
       System.out.println(" There has been an error in saving \n" );
     }
@@ -216,7 +215,7 @@ public class UserInterface {
     try {
       Warehouse tempWarehouse = Warehouse.retrieve();
       if (tempWarehouse != null) {
-        System.out.println(" The library has been successfully retrieved from the file LibraryData \n" );
+        System.out.println(" The warehouse has been successfully retrieved from the file WarehouseData \n" );
         warehouse = tempWarehouse;
       } else {
         System.out.println("File doesnt exist; creating new library" );

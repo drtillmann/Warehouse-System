@@ -37,11 +37,11 @@ public class Warehouse implements Serializable {
   public static final int OPERATION_FAILED= 8;
   public static final int NO_SUCH_MEMBER = 9;
   private Catalog catalog;
-  private MemberList memberList;
+  private ClientList clientList;
   private static Warehouse warehouse;
   private Warehouse() {
     catalog = Catalog.instance();
-    memberList = MemberList.instance();
+    clientList = ClientList.instance();
   }
   public static Warehouse instance() {
     if (warehouse == null) {
@@ -58,10 +58,11 @@ public class Warehouse implements Serializable {
     }
     return null;
   }
-  public Member addMember(String name, String address, String phone) {
-    Member member = new Member(name, address, phone);
-    if (memberList.insertMember(member)) {
-      return (member);
+  
+  public Client addClient(String name, String address, String phone) {
+    Client client = new Client(name, address, phone);
+    if (clientList.insertClient(client)) {
+      return (client);
     }
     return null;
   }
@@ -71,15 +72,15 @@ public class Warehouse implements Serializable {
       return catalog.getBooks();
   }
 
-  public Iterator getMembers() {
-      return memberList.getMembers();
+  public Iterator getClients() {
+      return clientList.getClients();
   }
   public static Warehouse retrieve() {
     try {
-      FileInputStream file = new FileInputStream("LibraryData");
+      FileInputStream file = new FileInputStream("WarehouseData");
       ObjectInputStream input = new ObjectInputStream(file);
       input.readObject();
-      MemberIdServer.retrieve(input);
+      ClientIdServer.retrieve(input);
       return warehouse;
     } catch(IOException ioe) {
       ioe.printStackTrace();
@@ -91,10 +92,10 @@ public class Warehouse implements Serializable {
   }
   public static  boolean save() {
     try {
-      FileOutputStream file = new FileOutputStream("LibraryData");
+      FileOutputStream file = new FileOutputStream("WarehouseData");
       ObjectOutputStream output = new ObjectOutputStream(file);
       output.writeObject(warehouse);
-      output.writeObject(MemberIdServer.instance());
+      output.writeObject(ClientIdServer.instance());
       return true;
     } catch(IOException ioe) {
       ioe.printStackTrace();
@@ -124,7 +125,7 @@ public class Warehouse implements Serializable {
     }
   }
   public String toString() {
-    return catalog + "\n" + memberList;
+    return catalog + "\n" + clientList;
   }
     
 }
