@@ -1,6 +1,7 @@
+package warehouse.system;
+
 import java.util.*;
-import java.text.*;
-import java.io.*;
+
 public class ClientTester {
   
   public static void main(String[] s) {
