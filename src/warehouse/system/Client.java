@@ -1,5 +1,6 @@
 package warehouse.system;
 
+
 import java.util.*;
 import java.io.*;
 public class Client implements Serializable {
@@ -37,6 +38,9 @@ public class Client implements Serializable {
   }
   public void setPhone(String newPhone) {
     this.phone = newPhone;
+  }
+   public void setID() {
+    this.id = CLIENT_STRING + (ClientIdServer.instance()).getId();
   }
   public boolean equals(String id) {
     return this.id.equals(id);
