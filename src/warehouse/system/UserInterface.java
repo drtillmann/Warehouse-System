@@ -14,6 +14,8 @@ package warehouse.system;
 import java.util.*;
 import java.text.*;
 import java.io.*;
+
+
 public class UserInterface {
   private static UserInterface userInterface;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -113,8 +115,8 @@ public class UserInterface {
   public void help() {
     System.out.println("Enter a number between 0 and 12 as explained below:");
     System.out.println(EXIT + " to Exit\n");
-    System.out.println(ADD_CLIENT + " to add a member");
-    System.out.println(ADD_PRODUCT + " to  add books");
+    System.out.println(ADD_CLIENT + " to add a client");
+    System.out.println(ADD_PRODUCT + " to  add products");
     System.out.println(PLACE_ORDER + " to  place a client's order ");
     //System.out.println(RETURN_BOOKS + " to  return books ");
     //System.out.println(RENEW_BOOKS + " to  renew books ");
@@ -169,9 +171,9 @@ public class UserInterface {
   }
 */
   public void showProducts() {
-      Iterator allBooks = warehouse.getBooks();
-      while (allBooks.hasNext()){
-	  Product product = (Product)(allBooks.next());
+      Iterator allProducts = warehouse.getProducts();
+      while (allProducts.hasNext()){
+	  Product product = (Product)(allProducts.next());
           System.out.println(product.toString());
       }
   }
