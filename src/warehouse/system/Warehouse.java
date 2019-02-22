@@ -30,25 +30,25 @@ public class Warehouse implements Serializable {
   public static final int OPERATION_COMPLETED= 7;
   public static final int OPERATION_FAILED= 8;
   public static final int NO_SUCH_MEMBER = 9;
-  private Catalog catalog;
+  private Inventory inventory;
   private ClientList clientList;
   private static Warehouse warehouse;
   private Warehouse() {
-    catalog = Catalog.instance();
+    inventory = Inventory.instance();
     clientList = ClientList.instance();
   }
   public static Warehouse instance() {
     if (warehouse == null) {
-      MemberIdServer.instance(); // instantiate all singletons
+      ClientIdServer.instance(); // instantiate all singletons
       return (warehouse = new Warehouse());
     } else {
       return warehouse;
     }
   }
-  public Book addBook(String title, String author, String id) {
-    Book book = new Book(title, author, id);
-    if (catalog.insertBook(book)) {
-      return (book);
+  public Product addProduct(String title, String author, String id) {
+    Product product = new Product(title, author, id);
+    if (inventory.insertProduct(product)) {
+      return (product);
     }
     return null;
   }
@@ -62,8 +62,8 @@ public class Warehouse implements Serializable {
   }
 
 
-  public Iterator getBooks() {
-      return catalog.getBooks();
+  public Iterator getProducts() {
+      return inventory.getProducts();
   }
 
   public Iterator getClients() {
@@ -119,7 +119,7 @@ public class Warehouse implements Serializable {
     }
   }
   public String toString() {
-    return catalog + "\n" + clientList;
+    return inventory + "\n" + clientList;
   }
     
 }
