@@ -4,12 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/Warehouse.java</file>
-            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/ClientTester.java</file>
-            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/ClientList.java</file>
-            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/LibraryCode/Stage1/Library.java</file>
-            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/Client.java</file>
-            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/ClientIdServer.java</file>
+            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/ManufacturerList.java</file>
+            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/Manufacturer.java</file>
             <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/UserInterface.java</file>
+            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/ProductList.java</file>
+            <file>file:/F:/School/SCSU/7.%202019,%20Spring/CSCI%20430%20-%20OO%20Software%20Development/Warehouse%20System/src/warehouse/system/Product.java</file>
         </group>
     </open-files>
 </project-private>

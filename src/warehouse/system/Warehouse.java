@@ -30,23 +30,30 @@ public class Warehouse implements Serializable {
   public static final int OPERATION_COMPLETED= 7;
   public static final int OPERATION_FAILED= 8;
   public static final int NO_SUCH_MEMBER = 9;
-  private Inventory inventory;
+  private ProductList inventory;
   private ClientList clientList;
+  private ManufacturerList manuList;
   private static Warehouse warehouse;
+  
+  
   private Warehouse() {
-    inventory = Inventory.instance();
+    inventory = ProductList.instance();
     clientList = ClientList.instance();
+    manuList = ManufacturerList.instance();
   }
   public static Warehouse instance() {
     if (warehouse == null) {
       ClientIdServer.instance(); // instantiate all singletons
+      ProductIdServer.instance();
+      ManufacturerIdServer.instance();
       return (warehouse = new Warehouse());
     } else {
       return warehouse;
     }
   }
-  public Product addProduct(String title, String author, String id) {
-    Product product = new Product(title, author, id);
+  public Product addProduct(String productName, String manuID , double price) {
+    Manufacturer manu = manuList.search(manuID);
+    Product product = new Product(productName, manu, price);
     if (inventory.insertProduct(product)) {
       return (product);
     }
@@ -60,7 +67,53 @@ public class Warehouse implements Serializable {
     }
     return null;
   }
-
+  
+  public Manufacturer addManufacturer(String name, String id){
+      Manufacturer manu = new Manufacturer(name, id);
+      if(manuList.insertManufacturer(manu)){
+          return (manu);
+      }
+      return null;
+  }
+  
+  public boolean manufacturerExists(String mid){
+      Iterator manuIterator = manuList.getManufacturers();
+      while(manuIterator.hasNext()){
+          Manufacturer manu = (Manufacturer) manuIterator.next();
+          if(manu.getId().equals(mid)){
+              return true;
+          }
+      }
+      return false;
+  }
+  
+  
+  public boolean productExists(String pid){
+      if(inventory.productExists(pid)) return true;
+      return false;
+  }
+  
+  public int assignProduct(String pid, String mid){
+      Product product = inventory.search(pid);
+      if(product == null){
+          return 1;
+      }
+      Manufacturer manu = manuList.search(mid);
+      if(manu == null){
+          return 2;
+      }
+      manu.addProduct(product);
+      return 3;
+  }
+  
+  public boolean unassignProduct(String pid, String mid){
+      Manufacturer manu = manuList.search(mid);
+      return manu.removeProduct(pid);// && removeProduct(pid);
+  }
+  
+  public boolean removeProduct(String pid){
+      return inventory.removeProduct(pid);
+  }
 
   public Iterator getProducts() {
       return inventory.getProducts();
@@ -69,6 +122,16 @@ public class Warehouse implements Serializable {
   public Iterator getClients() {
       return clientList.getClients();
   }
+  
+  public Iterator getManufacturers(){
+      return manuList.getManufacturers();
+  }
+  
+  public Iterator getManuProducts(String mid){
+      Manufacturer manu = manuList.search(mid);
+      return manu.getProducts();
+  }
+  
   public static Warehouse retrieve() {
     try {
       FileInputStream file = new FileInputStream("WarehouseData");
