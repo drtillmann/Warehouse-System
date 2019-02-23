@@ -10,41 +10,45 @@ package warehouse.system;
  *
  * @author drtil
  */
-import LibraryCode.Stage1.Book;
-import LibraryCode.Stage1.Library;
-import LibraryCode.Stage1.Member;
+
 import java.util.*;
 import java.text.*;
 import java.io.*;
+
+
 public class UserInterface {
   private static UserInterface userInterface;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   
-  //TODO - CHANGE TO WAREHOUSE
-  private static Library library;
+  private static Warehouse warehouse;
   
   private static final int EXIT = 0;
   private static final int ADD_CLIENT = 1;
-  private static final int ADD_PRODUCT = 2;
-  private static final int PLACE_ORDER = 3;
+  private static final int ADD_MANUFACTURER = 2;
+  private static final int ADD_PRODUCT = 3;
+  //private static final int ASSIGN_PRODUCT = 4;
+  private static final int UNASSIGN_PRODUCT = 4;
+  //private static final int PLACE_ORDER = 4;
   //private static final int RETURN_BOOKS = 4;
   //private static final int RENEW_BOOKS = 5;
   //private static final int REMOVE_BOOKS = 6;
   //private static final int PLACE_HOLD = 7;
   //private static final int REMOVE_HOLD = 8;
   //private static final int PROCESS_HOLD = 9;
-  private static final int GET_TRANSACTIONS = 10;
-  private static final int SHOW_CLIENTS = 11;
-  private static final int SHOW_PRODUCTS = 12;
-  //private static final int SAVE = 13;
-  //private static final int RETRIEVE = 14;
-  private static final int HELP = 15;
+  //private static final int GET_TRANSACTIONS = 10;
+  private static final int SHOW_CLIENTS = 5;
+  private static final int SHOW_PRODUCTS = 6;
+  private static final int SHOW_MANUFACTURERS = 7;
+  private static final int SHOW_MANUFACTURERS_PRODUCTS = 8;
+  private static final int SAVE = 9;
+  private static final int RETRIEVE = 10;
+  private static final int HELP = 11;
   
   private UserInterface() {
     if (yesOrNo("Look for saved data and  use it?")) {
       retrieve();
     } else {
-      library = Library.instance();
+      warehouse = Warehouse.instance();
     }
   }
   public static UserInterface instance() {
@@ -54,6 +58,11 @@ public class UserInterface {
       return userInterface;
     }
   }
+  
+  public void print(String val){
+      System.out.println(val);
+  }
+  
   public String getToken(String prompt) {
     do {
       try {
@@ -68,6 +77,8 @@ public class UserInterface {
       }
     } while (true);
   }
+  
+  
   private boolean yesOrNo(String prompt) {
     String more = getToken(prompt + " (Y|y)[es] or anything else for no");
     if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
@@ -75,6 +86,8 @@ public class UserInterface {
     }
     return true;
   }
+  
+  
   public int getNumber(String prompt) {
     do {
       try {
@@ -113,31 +126,35 @@ public class UserInterface {
   }
 
   public void help() {
-    System.out.println("Enter a number between 0 and 12 as explained below:");
-    System.out.println(EXIT + " to Exit\n");
-    System.out.println(ADD_CLIENT + " to add a member");
-    System.out.println(ADD_PRODUCT + " to  add books");
-    System.out.println(PLACE_ORDER + " to  place a client's order ");
+    print("Enter a number between 0 and 12 as explained below:");
+    print(EXIT + " to Exit\n");
+    print(ADD_CLIENT + " to add a client");
+    print(ADD_MANUFACTURER + " to add a manufacturer");
+    print(ADD_PRODUCT + " to add products and assign them to a manufacturer");
+    print(UNASSIGN_PRODUCT + " to unassign a product from a manufacturer");
+    //System.out.println(PLACE_ORDER + " to  place a client's order ");
     //System.out.println(RETURN_BOOKS + " to  return books ");
     //System.out.println(RENEW_BOOKS + " to  renew books ");
     //System.out.println(REMOVE_BOOKS + " to  remove books");
     //System.out.println(PLACE_HOLD + " to  place a hold on a book");
     //System.out.println(REMOVE_HOLD + " to  remove a hold on a book");
     //System.out.println(PROCESS_HOLD + " to  process holds");
-    System.out.println(GET_TRANSACTIONS + " to  print transactions");
-    System.out.println(SHOW_CLIENTS + " to  print members");
-    System.out.println(SHOW_PRODUCTS + " to  print books");
-    //System.out.println(SAVE + " to  save data");
-    //System.out.println(RETRIEVE + " to  retrieve");
-    System.out.println(HELP + " for help");
+    //System.out.println(GET_TRANSACTIONS + " to  print transactions");
+    print(SHOW_CLIENTS + " to print clients");
+    print(SHOW_PRODUCTS + " to print products");
+    print(SHOW_MANUFACTURERS + " to print manufacturers");
+    print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");
+    print(SAVE + " to save data");
+    print(RETRIEVE + " to retrieve");
+    print(HELP + " for help");
   }
 
   public void addClient() {
     String name = getToken("Enter client name");
     String address = getToken("Enter address");
     String phone = getToken("Enter phone");
-    Member result;
-    result = library.addMember(name, address, phone);
+    
+    Client result = warehouse.addClient(name, address, phone);
     if (result == null) {
       System.out.println("Could not add client");
     }
@@ -145,22 +162,71 @@ public class UserInterface {
   }
 
   public void addProducts() {
-    Book result;
+    Product result;
     do {
-      String title = getToken("Enter Product name");
-      String bookID = getToken("Enter id");
-      String author = getToken("Enter author");
-      result = library.addProduct(title, author, bookID);
-      if (result != null) {
-        System.out.println(result);
+      String name = getToken("Enter Product Name:");
+      String manuID = getToken("Enter Manufacturer ID:");      
+      String price = getToken("Enter Price");
+      if(warehouse.manufacturerExists(manuID)){
+        result = warehouse.addProduct(name, manuID, Double.parseDouble(price));
+        if (result != null) {
+          assignProduct(result.getID(), manuID);
+          System.out.println(result);
       } else {
-        System.out.println("Book could not be added");
+        System.out.println("Product could not be added");
+        }
       }
-      if (!yesOrNo("Add more books?")) {
+      
+      
+      if (!yesOrNo("Add more Products?")) {
         break;
       }
     } while (true);
   }
+  
+  public void addManufacturer(){
+      String name = getToken("Enter Manufacturer Name: ");
+      String id = getToken("Enter Manufacturer ID: ");
+      Manufacturer result = warehouse.addManufacturer(name, id);
+      if(result != null){
+          System.out.println(result);
+      }else{
+          System.out.println("Manufacturer could not be added.");
+      }
+  }
+  
+  private void assignProduct(String pid, String mid){
+      
+      int result = warehouse.assignProduct(pid, mid);
+      switch(result){
+          case 1:
+              print("Could not find the Product associated with ID: " + pid);
+              break;
+          case 2:
+              print("Could not find the Manufacturer associated with ID: " + mid);
+              break;
+          case 3:
+              print("Product added to to the Manufacturer");
+              break;       
+      }
+  }
+  
+  public void unassignProduct(){
+    String productID = getToken("Enter the Product ID: ");
+    String manuID = getToken("Enter the Manufacturer's ID: ");
+    if(!warehouse.manufacturerExists(manuID)){
+        print("The Manufacturer ID " + manuID + " does not exist.");
+    }else if(!warehouse.productExists(productID)){
+        print("The Product ID " + productID + " does not exist.");
+    }else{
+        if(warehouse.unassignProduct(productID, manuID)){
+              print("Product " + productID + " removed from Manufacturer " + manuID);
+        }else{
+            print("The Prooduct was not removed.");
+        }
+    }
+ }
+  
   
   public void placeOrder() {
          System.out.println("Dummy Action");
@@ -171,18 +237,36 @@ public class UserInterface {
   }
 */
   public void showProducts() {
-      Iterator allBooks = library.getBooks();
-      while (allBooks.hasNext()){
-	  Book book = (Book)(allBooks.next());
-          System.out.println(book.toString());
+      Iterator allProducts = warehouse.getProducts();
+      while (allProducts.hasNext()){
+	  Product product = (Product)(allProducts.next());
+          System.out.println(product.toString());
       }
   }
 
   public void showClients() {
-      Iterator allMembers = library.getMembers();
-      while (allMembers.hasNext()){
-	  Member member = (Member)(allMembers.next());
-          System.out.println(member.toString());
+      Iterator allClients = warehouse.getClients();
+      while (allClients.hasNext()){
+	  Client client = (Client)(allClients.next());
+          System.out.println(client.toString());
+      }
+  }
+  
+  public void showManufacturers(){
+      Iterator allManus = warehouse.getManufacturers();
+      while(allManus.hasNext()){
+          Manufacturer manu = (Manufacturer) allManus.next();
+          System.out.println(manu.toString());
+      }
+      
+  }
+  
+  public void showManuProducts(){
+      String mid = getToken("Enter the Manufacturer's ID to display all of their Procucts.");
+      Iterator allManuProducts = warehouse.getManuProducts(mid);
+      while(allManuProducts.hasNext()){
+          Product prod = (Product) allManuProducts.next();
+          print(prod.toString());
       }
   }
 
@@ -207,21 +291,21 @@ public class UserInterface {
       System.out.println("Dummy Action");   
   }
   private void save() {
-    if (library.save()) {
-      System.out.println(" The library has been successfully saved in the file LibraryData \n" );
+    if (warehouse.save()) {
+      System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
     } else {
       System.out.println(" There has been an error in saving \n" );
     }
   }
   private void retrieve() {
     try {
-      Library tempLibrary = Library.retrieve();
-      if (tempLibrary != null) {
-        System.out.println(" The library has been successfully retrieved from the file LibraryData \n" );
-        library = tempLibrary;
+      Warehouse tempWarehouse = Warehouse.retrieve();
+      if (tempWarehouse != null) {
+        System.out.println(" The warehouse has been successfully retrieved from the file WarehouseData \n" );
+        warehouse = tempWarehouse;
       } else {
         System.out.println("File doesnt exist; creating new library" );
-        library = Library.instance();
+        warehouse = Warehouse.instance();
       }
     } catch(Exception cnfe) {
       cnfe.printStackTrace();
@@ -236,6 +320,12 @@ public class UserInterface {
                                 break;
         case ADD_PRODUCT:       addProducts();
                                 break;
+        case ADD_MANUFACTURER:  addManufacturer();
+                                break;
+                                
+        case UNASSIGN_PRODUCT:  unassignProduct();
+                                break;
+                                /*
         case PLACE_ORDER:       placeOrder();
                                 break;
         /*
@@ -253,18 +343,22 @@ public class UserInterface {
                                 break;
 
         */
+                                /*
         case GET_TRANSACTIONS:  getTransactions();
                                 break;
-        /*
+        */
         case SAVE:              save();
                                 break;
         case RETRIEVE:          retrieve();
                                 break;
-        */
         case SHOW_CLIENTS:	showClients();
                                 break; 		
         case SHOW_PRODUCTS:	showProducts();
-                                break; 		
+                                break;
+        case SHOW_MANUFACTURERS: showManufacturers();
+                                break;
+        case SHOW_MANUFACTURERS_PRODUCTS: showManuProducts();
+                                break;
         case HELP:              help();
                                 break;
       }
