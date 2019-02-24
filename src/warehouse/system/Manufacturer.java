@@ -67,6 +67,7 @@ public class Manufacturer implements Serializable {
       return false;
   }
   
+  
   public Iterator getProducts(){
       //return manuProducts.getProducts();
       return manuProducts.iterator();
