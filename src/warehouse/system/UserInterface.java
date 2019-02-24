@@ -260,8 +260,8 @@ public class UserInterface {
   }
   
   public void showProductManufacturers(){
-      String productName = getToken("Enter the Product name to print its Manufacturers.");
-      Iterator prodManufacturers = warehouse.getProductManufacturers(productName);
+      String pid = getToken("Enter the Product ID to print its Manufacturers.");
+      Iterator prodManufacturers = warehouse.getProductManufacturers(pid);
       while(prodManufacturers.hasNext()){
           Manufacturer manu = (Manufacturer) prodManufacturers.next();
           print(manu.toString());
