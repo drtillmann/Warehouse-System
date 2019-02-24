@@ -132,6 +132,10 @@ public class Warehouse implements Serializable {
       return manu.getProducts();
   }
   
+  public Iterator getProductManufacturers(String productName){
+      return manuList.getProductManufacturers(productName);
+  }
+  
   public static Warehouse retrieve() {
     try {
       FileInputStream file = new FileInputStream("WarehouseData");

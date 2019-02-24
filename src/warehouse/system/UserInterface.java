@@ -19,30 +19,21 @@ import java.io.*;
 public class UserInterface {
   private static UserInterface userInterface;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-  
   private static Warehouse warehouse;
   
   private static final int EXIT = 0;
   private static final int ADD_CLIENT = 1;
   private static final int ADD_MANUFACTURER = 2;
   private static final int ADD_PRODUCT = 3;
-  //private static final int ASSIGN_PRODUCT = 4;
   private static final int UNASSIGN_PRODUCT = 4;
-  //private static final int PLACE_ORDER = 4;
-  //private static final int RETURN_BOOKS = 4;
-  //private static final int RENEW_BOOKS = 5;
-  //private static final int REMOVE_BOOKS = 6;
-  //private static final int PLACE_HOLD = 7;
-  //private static final int REMOVE_HOLD = 8;
-  //private static final int PROCESS_HOLD = 9;
-  //private static final int GET_TRANSACTIONS = 10;
   private static final int SHOW_CLIENTS = 5;
   private static final int SHOW_PRODUCTS = 6;
   private static final int SHOW_MANUFACTURERS = 7;
   private static final int SHOW_MANUFACTURERS_PRODUCTS = 8;
-  private static final int SAVE = 9;
-  private static final int RETRIEVE = 10;
-  private static final int HELP = 11;
+  private static final int SHOW_PRODUCT_MANUFACTURERS = 9;
+  private static final int SAVE = 10;
+  private static final int RETRIEVE = 11;
+  private static final int HELP = 12;
   
   private UserInterface() {
     if (yesOrNo("Look for saved data and  use it?")) {
@@ -77,8 +68,7 @@ public class UserInterface {
       }
     } while (true);
   }
-  
-  
+ 
   private boolean yesOrNo(String prompt) {
     String more = getToken(prompt + " (Y|y)[es] or anything else for no");
     if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
@@ -144,6 +134,7 @@ public class UserInterface {
     print(SHOW_PRODUCTS + " to print products");
     print(SHOW_MANUFACTURERS + " to print manufacturers");
     print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");
+    print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");
     print(SAVE + " to save data");
     print(RETRIEVE + " to retrieve");
     print(HELP + " for help");
@@ -176,8 +167,6 @@ public class UserInterface {
         System.out.println("Product could not be added");
         }
       }
-      
-      
       if (!yesOrNo("Add more Products?")) {
         break;
       }
@@ -225,7 +214,7 @@ public class UserInterface {
             print("The Prooduct was not removed.");
         }
     }
- }
+  }
   
   
   public void placeOrder() {
@@ -267,6 +256,15 @@ public class UserInterface {
       while(allManuProducts.hasNext()){
           Product prod = (Product) allManuProducts.next();
           print(prod.toString());
+      }
+  }
+  
+  public void showProductManufacturers(){
+      String productName = getToken("Enter the Product name to print its Manufacturers.");
+      Iterator prodManufacturers = warehouse.getProductManufacturers(productName);
+      while(prodManufacturers.hasNext()){
+          Manufacturer manu = (Manufacturer) prodManufacturers.next();
+          print(manu.toString());
       }
   }
 
@@ -321,32 +319,9 @@ public class UserInterface {
         case ADD_PRODUCT:       addProducts();
                                 break;
         case ADD_MANUFACTURER:  addManufacturer();
-                                break;
-                                
+                                break;                      
         case UNASSIGN_PRODUCT:  unassignProduct();
                                 break;
-                                /*
-        case PLACE_ORDER:       placeOrder();
-                                break;
-        /*
-        case RETURN_BOOKS:      returnBooks();
-                                break;
-        case REMOVE_BOOKS:      removeBooks();
-                                break;
-        case RENEW_BOOKS:       renewBooks();
-                                break;
-        case PLACE_HOLD:        placeHold();
-                                break;
-        case REMOVE_HOLD:       removeHold();
-                                break;
-        case PROCESS_HOLD:      processHolds();
-                                break;
-
-        */
-                                /*
-        case GET_TRANSACTIONS:  getTransactions();
-                                break;
-        */
         case SAVE:              save();
                                 break;
         case RETRIEVE:          retrieve();
@@ -359,6 +334,7 @@ public class UserInterface {
                                 break;
         case SHOW_MANUFACTURERS_PRODUCTS: showManuProducts();
                                 break;
+        case SHOW_PRODUCT_MANUFACTURERS: showProductManufacturers();
         case HELP:              help();
                                 break;
       }

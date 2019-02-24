@@ -66,4 +66,21 @@ public class ManufacturerList implements Serializable {
   public Iterator getManufacturers(){
       return manufacturers.iterator();
   }
+  
+  public Iterator getProductManufacturers(String productName){
+      List productManufacturers = new ArrayList();
+      for(int i = 0; i < manufacturers.size(); i++){
+          Manufacturer manu = (Manufacturer) manufacturers.get(i);
+          Iterator prodIterator = manu.getProducts();
+          while(prodIterator.hasNext()){
+              Product prod = (Product) prodIterator.next();
+              if(prod.getProductName().equals(productName)){
+                  productManufacturers.add(manufacturers.get(i));
+                  break;
+              }
+          }
+      }
+      
+      return productManufacturers.iterator();
+  }
 }
