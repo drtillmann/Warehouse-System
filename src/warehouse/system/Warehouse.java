@@ -132,8 +132,8 @@ public class Warehouse implements Serializable {
       return manu.getProducts();
   }
   
-  public Iterator getProductManufacturers(String productName){
-      return manuList.getProductManufacturers(productName);
+  public Iterator getProductManufacturers(String pid){
+      return manuList.getProductManufacturers(pid);
   }
   
   public static Warehouse retrieve() {
