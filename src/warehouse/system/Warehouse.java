@@ -108,7 +108,7 @@ public class Warehouse implements Serializable {
   
   public boolean unassignProduct(String pid, String mid){
       Manufacturer manu = manuList.search(mid);
-      return manu.removeProduct(pid);// && removeProduct(pid);
+      return manu.removeProduct(pid) && removeProduct(pid);
   }
   
   public boolean removeProduct(String pid){
