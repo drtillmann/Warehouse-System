@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package warehouse.system;
+//package warehouse.system;
 
 import java.util.Iterator;
+
 
 /**
  *
@@ -124,7 +125,7 @@ public class tester {
         }
         if(unassigned){
             warehouse.removeProduct("P2");
-            print("Product unassigned.");
+            print("Product unassigned and removed.");
         }else{
             print("Unable to unassign product from manufacturer.");
         }

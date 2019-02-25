@@ -1,4 +1,4 @@
-package warehouse.system;
+//package warehouse.system;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -302,7 +302,7 @@ public class UserInterface {
         System.out.println(" The warehouse has been successfully retrieved from the file WarehouseData \n" );
         warehouse = tempWarehouse;
       } else {
-        System.out.println("File doesnt exist; creating new library" );
+        System.out.println("File doesnt exist; creating new warehouse" );
         warehouse = Warehouse.instance();
       }
     } catch(Exception cnfe) {
