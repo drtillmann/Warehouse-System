@@ -12,6 +12,7 @@ package warehouse.system;
  */
 import java.util.*;
 import java.io.*;
+import javax.swing.JOptionPane;
 public class ProductList implements Serializable {
   
   private static final long serialVersionUID = 1L;
@@ -72,13 +73,15 @@ public class ProductList implements Serializable {
   
   public boolean removeProduct(String pid){
       int index = -1;
+      //JOptionPane.showMessageDialog(null, products.size());
       for(int i = 0; i < products.size(); i++){
-          Product product = (Product)products.get(index);
+          Product product = (Product)products.get(i);
           if(product.getID().equals(pid)){
               index = i;
               break;
           }
       }
+      //JOptionPane.showMessageDialog(null, index);
       if(index != -1){
           products.remove(index);
           return true;
