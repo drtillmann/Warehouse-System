@@ -1,4 +1,4 @@
-//package warehouse.system;
+package warehouse.system;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -12,7 +12,7 @@
  */
 import java.util.*;
 import java.io.*;
-import javax.swing.JOptionPane;
+
 public class ProductList implements Serializable {
   
   private static final long serialVersionUID = 1L;
