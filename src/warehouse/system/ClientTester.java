@@ -1,4 +1,4 @@
-//package warehouse.system;
+package warehouse.system;
 
 import java.util.*;
 import java.text.*;

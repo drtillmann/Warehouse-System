@@ -1,4 +1,4 @@
-//package warehouse.system;
+package warehouse.system;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,7 +11,6 @@
  * @author Daniel
  */
 import java.util.*;
-import java.lang.*;
 import java.io.*;
 public class Manufacturer implements Serializable {
   private static final long serialVersionUID = 1L;
