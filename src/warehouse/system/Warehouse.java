@@ -30,6 +30,8 @@
         public static final int OPERATION_COMPLETED= 7;
         public static final int OPERATION_FAILED= 8;
         public static final int NO_SUCH_MEMBER = 9;
+        
+        private Order order;
         private ProductList inventory;
         private ClientList clientList;
         private ManufacturerList manuList;
