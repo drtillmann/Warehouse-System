@@ -57,10 +57,10 @@
         }
 
         public String toString(){
-            String strProducts = "Order ID: " + this.getId() + "Balance: " + this.getBalance() + "\n Products: ";
+            String strProducts = "Order ID: " + this.getId() + "\n Balance: " + this.getBalance() + "\n Products: ";
 
             for(Product product : this.products){
-                strProducts += product + "\n";
+                strProducts += "\n" + product;
             }        
             return strProducts;
         }

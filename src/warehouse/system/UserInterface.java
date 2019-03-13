@@ -14,6 +14,7 @@ package warehouse.system;
 import java.util.*;
 import java.text.*;
 import java.io.*;
+import javax.swing.JOptionPane;
 
 
 public class UserInterface {
@@ -31,11 +32,10 @@ public class UserInterface {
   private static final int SHOW_MANUFACTURERS = 7;
   private static final int SHOW_MANUFACTURERS_PRODUCTS = 8;
   private static final int SHOW_PRODUCT_MANUFACTURERS = 9;
-  private static final int PLACE_ORDER_CLIENT = 10;
-  private static final int PLACE_ORDER_MANUFACTURER = 11;
-  private static final int SAVE = 12;
-  private static final int RETRIEVE = 13;
-  private static final int HELP = 14;
+  private static final int PLACE_ORDER = 10;
+  private static final int SAVE = 11;
+  private static final int RETRIEVE = 12;
+  private static final int HELP = 13;
   
   private UserInterface() {
     if (yesOrNo("Look for saved data and  use it?")) {
@@ -124,19 +124,12 @@ public class UserInterface {
     print(ADD_MANUFACTURER + " to add a manufacturer");
     print(ADD_PRODUCT + " to add products and assign them to a manufacturer");
     print(UNASSIGN_PRODUCT + " to unassign a product from a manufacturer");
-    //System.out.println(PLACE_ORDER + " to  place a client's order ");
-    //System.out.println(RETURN_BOOKS + " to  return books ");
-    //System.out.println(RENEW_BOOKS + " to  renew books ");
-    //System.out.println(REMOVE_BOOKS + " to  remove books");
-    //System.out.println(PLACE_HOLD + " to  place a hold on a book");
-    //System.out.println(REMOVE_HOLD + " to  remove a hold on a book");
-    //System.out.println(PROCESS_HOLD + " to  process holds");
-    //System.out.println(GET_TRANSACTIONS + " to  print transactions");
     print(SHOW_CLIENTS + " to print clients");
     print(SHOW_PRODUCTS + " to print products");
     print(SHOW_MANUFACTURERS + " to print manufacturers");
     print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");
     print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");
+    print(PLACE_ORDER + "to place an order");
     print(SAVE + " to save data");
     print(RETRIEVE + " to retrieve");
     print(HELP + " for help");
@@ -158,10 +151,11 @@ public class UserInterface {
     Product result;
     do {
       String name = getToken("Enter Product Name:");
-      String manuID = getToken("Enter Manufacturer ID:");      
+      String manuID = getToken("Enter Manufacturer ID:");  
+      String quantity = getToken("Enter Product Quantity:");
       String price = getToken("Enter Price");
       if(warehouse.manufacturerExists(manuID)){
-        result = warehouse.addProduct(name, manuID, Double.parseDouble(price));
+        result = warehouse.addProduct(name, manuID, quantity, price);
         if (result != null) {
           assignProduct(result.getID(), manuID);
           System.out.println(result);
@@ -222,31 +216,33 @@ public class UserInterface {
   public void placeOrder() {
          String clientID = null;
          String productID = null;
-         List<String> orderedProductIDs = new ArrayList<>();
          String orderQty = null;
+         List<String> orderedProductIDs = new ArrayList<>();
+         List<String> orderedQty = new ArrayList<>();
          
-         String cont = null;
+         
          do{
-            do{
                clientID = getToken("Enter the Client ID: ").trim();
             }while(warehouse.searchClient(clientID) == null);
-
+         
+         do{
             do{
                 productID = getToken("Enter the Product ID: ").trim();
                 orderedProductIDs.add(productID);
             }while(warehouse.searchProduct(productID) == null);
 
             orderQty = getToken("Enter the Order Qty of the Product: ").trim();
-
-            cont = getToken("Add Another Product to the Order?: Y|N").toUpperCase().trim();
-         }while(cont.equals("Y"));
+            orderedQty.add(orderQty);
+            
+         }while(!yesOrNo("Add Another Product to the Order?"));
          
-         boolean result = warehouse.placeOrder(clientID, orderedProductIDs, orderQty);
+         boolean result = warehouse.placeOrder(clientID, orderedProductIDs, orderedQty);
          
-         
-         
-         
-         
+         if(result){
+             JOptionPane.showMessageDialog(null, "Order Filled 100%");
+         }else{
+             JOptionPane.showMessageDialog(null, "Order Added to Waitlist.");
+         }
   }
   /*
   public void renewBooks() {
@@ -363,6 +359,9 @@ public class UserInterface {
         case SHOW_MANUFACTURERS_PRODUCTS: showManuProducts();
                                 break;
         case SHOW_PRODUCT_MANUFACTURERS: showProductManufacturers();
+                                break;
+        case PLACE_ORDER: placeOrder();
+                                break;
         case HELP:              help();
                                 break;
       }
