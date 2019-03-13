@@ -12,6 +12,7 @@
     import java.io.ObjectOutputStream;
     import java.io.Serializable;
     import java.util.Iterator;
+import java.util.List;
 
     /**
      *
@@ -31,10 +32,12 @@
         public static final int OPERATION_FAILED= 8;
         public static final int NO_SUCH_MEMBER = 9;
         
-        private Order order;
+        
         private ProductList inventory;
         private ClientList clientList;
         private ManufacturerList manuList;
+        private OrderList orderList;
+        private WaitlistList waitlistList;
         private static Warehouse warehouse;
 
 
@@ -42,6 +45,8 @@
         inventory = ProductList.instance();
         clientList = ClientList.instance();
         manuList = ManufacturerList.instance();
+        orderList = OrderList.instance();
+        waitlistList = WaitlistList.instance();
       }
       public static Warehouse instance() {
         if (warehouse == null) {
@@ -124,6 +129,14 @@
       public Iterator getClients() {
           return clientList.getClients();
       }
+      
+      public Client searchClient(String clientID){
+          return clientList.search(clientID);
+      }
+      
+      public Product searchProduct(String productID){
+          return inventory.search(productID);
+      }
 
       public Iterator getManufacturers(){
           return manuList.getManufacturers();
@@ -138,6 +151,35 @@
           return manuList.getProductManufacturers(pid);
       }
 
+      public boolean placeOrder(String clientID, List<String> productIDs, String orderQty){
+          Client client = clientList.search(clientID);
+          int orderedQty = Integer.parseInt(orderQty);
+          ClientOrder clientOrder = new ClientOrder(client);
+          ManufacturerOrder manuOrder;
+          Waitlist wl = new Waitlist();
+          wl.setOrderID(clientOrder.getId());
+          boolean noWaitlistsAdded = true;
+          
+          for(String id : productIDs){
+              Product product = inventory.search(id);
+              
+              clientOrder.addProduct(product, orderedQty);
+              orderList.addOrder(clientOrder);
+              manuOrder = new ManufacturerOrder(product, orderedQty);
+              orderList.addOrder(manuOrder);
+              
+              int remainingOrderQty = inventory.subtractQty(id, orderedQty);
+             
+              if(remainingOrderQty != 0){ // 0 = enough inventory to fulfill product ordered quantity
+                //Process waitlist here  
+                wl.addProduct(product, remainingOrderQty);
+                waitlistList.addWaitlist(wl);
+                noWaitlistsAdded = false;
+              }
+          }
+          return noWaitlistsAdded;
+      }
+      
       public static Warehouse retrieve() {
         try {
           FileInputStream file = new FileInputStream("WarehouseData");
