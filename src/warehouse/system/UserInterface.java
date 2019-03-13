@@ -31,9 +31,11 @@ public class UserInterface {
   private static final int SHOW_MANUFACTURERS = 7;
   private static final int SHOW_MANUFACTURERS_PRODUCTS = 8;
   private static final int SHOW_PRODUCT_MANUFACTURERS = 9;
-  private static final int SAVE = 10;
-  private static final int RETRIEVE = 11;
-  private static final int HELP = 12;
+  private static final int PLACE_ORDER_CLIENT = 10;
+  private static final int PLACE_ORDER_MANUFACTURER = 11;
+  private static final int SAVE = 12;
+  private static final int RETRIEVE = 13;
+  private static final int HELP = 14;
   
   private UserInterface() {
     if (yesOrNo("Look for saved data and  use it?")) {
