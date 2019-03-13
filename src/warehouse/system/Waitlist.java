@@ -47,6 +47,14 @@ public class Waitlist implements Serializable{
         return true;
     }
     
+    public String toString(){
+        String sWaitlist =  "Waitlist ID: " + this.waitlistID + "\nOrder ID: " + this.orderID + "\nBackordered Products: ";
+        for(Product p : this.backorderedProducts){
+            sWaitlist += "\n"+ p;
+        }
+        return sWaitlist;
+    }
+    
     private void setWaitlistID(int wid){
         this.waitlistID = WAITLIST_STRING + String.valueOf(wid);
     }

@@ -5,6 +5,8 @@
      */
     package warehouse.system;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
     import java.io.FileInputStream;
     import java.io.FileOutputStream;
     import java.io.IOException;
@@ -13,6 +15,7 @@
     import java.io.Serializable;
     import java.util.Iterator;
 import java.util.List;
+import javax.swing.JOptionPane;
 
     /**
      *
@@ -58,9 +61,11 @@ import java.util.List;
           return warehouse;
         }
       }
-      public Product addProduct(String productName, String manuID , double price) {
+      public Product addProduct(String productName, String manuID , String quantity, String price) {
         Manufacturer manu = manuList.search(manuID);
-        Product product = new Product(productName, manu, price);
+        int productQty = Integer.parseInt(quantity);
+        double productPrice = Double.parseDouble(price);
+        Product product = new Product(productName, manu, productQty, productPrice);
         if (inventory.insertProduct(product)) {
           return (product);
         }
@@ -151,33 +156,53 @@ import java.util.List;
           return manuList.getProductManufacturers(pid);
       }
 
-      public boolean placeOrder(String clientID, List<String> productIDs, String orderQty){
+      public boolean placeOrder(String clientID, List<String> productIDs, List<String> orderQty){
           Client client = clientList.search(clientID);
-          int orderedQty = Integer.parseInt(orderQty);
           ClientOrder clientOrder = new ClientOrder(client);
           ManufacturerOrder manuOrder;
           Waitlist wl = new Waitlist();
           wl.setOrderID(clientOrder.getId());
           boolean noWaitlistsAdded = true;
           
-          for(String id : productIDs){
-              Product product = inventory.search(id);
+          for(int i = 0; i < productIDs.size(); i++){
+              String id = productIDs.get(i);
+              int orderedQty = Integer.parseInt(orderQty.get(i));
+              Product productInInventory = inventory.search(id);
+              int inventoryQty = productInInventory.getQty();
+              int remainingOrderQty = 0;
+              Product clientsOrderProduct = (Product)deepCopy(productInInventory);
+              clientsOrderProduct.setQty(orderedQty);
               
-              clientOrder.addProduct(product, orderedQty);
-              orderList.addOrder(clientOrder);
-              manuOrder = new ManufacturerOrder(product, orderedQty);
-              orderList.addOrder(manuOrder);
+              Product manuOrderProduct = (Product)deepCopy(productInInventory);
+              manuOrderProduct.setQty(orderedQty);
+              clientOrder.addProduct(clientsOrderProduct);
+              manuOrder = new ManufacturerOrder(productInInventory, orderedQty);
+              orderList.addOrder(manuOrder);              
               
-              int remainingOrderQty = inventory.subtractQty(id, orderedQty);
+              if(inventoryQty > orderedQty){
+                  inventory.updateQty(id, inventoryQty - orderedQty);
+              }else{
+                  remainingOrderQty = Math.abs(inventoryQty - orderedQty);
+                  inventory.updateQty(id, 0);
+              }
              
               if(remainingOrderQty != 0){ // 0 = enough inventory to fulfill product ordered quantity
                 //Process waitlist here  
-                wl.addProduct(product, remainingOrderQty);
+                wl.addProduct(productInInventory, remainingOrderQty);
                 waitlistList.addWaitlist(wl);
                 noWaitlistsAdded = false;
               }
           }
+          orderList.addOrder(clientOrder);
           return noWaitlistsAdded;
+      }
+      
+      public Iterator getOrders(){
+          return orderList.getOrders();
+      }
+      
+      public Iterator getWaitlists(){
+          return waitlistList.getWaitlists();
       }
       
       public static Warehouse retrieve() {
@@ -232,5 +257,23 @@ import java.util.List;
       public String toString() {
         return inventory + "\n" + clientList;
       }
+      
+ /**
+ * Makes a deep copy of any Java object that is passed.
+ */
+ private static Object deepCopy(Object object) {
+   try {
+     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+     ObjectOutputStream outputStrm = new ObjectOutputStream(outputStream);
+     outputStrm.writeObject(object);
+     ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+     ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+     return objInputStream.readObject();
+   }
+   catch (Exception e) {
+     e.printStackTrace();
+     return null;
+   }
+ }
 
     }

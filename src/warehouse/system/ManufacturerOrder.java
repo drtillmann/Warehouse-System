@@ -29,7 +29,7 @@ public class ManufacturerOrder extends Order{
     }
     
     public String toString(){
-        return "Manufacturer: " + product.getManufacturer().getName() + "\n" + super.toString();
+        return "\n(Manufacturer Order) \nManufacturer: " + product.getManufacturer().getName() + "\n" + this.product;
     }
     
 }

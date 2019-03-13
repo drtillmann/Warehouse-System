@@ -26,14 +26,14 @@ public class ClientOrder extends Order{
         return this.client;
     }
     
-    public void addProduct(Product product, int qty){
-        product.setQty(qty);
+    public void addProduct(Product p){
+        Product product = p;
         super.addProduct(product);
-        super.setBalance(product, qty);
+        super.setBalance(product, product.getQty());
     }
     
     public String toString(){
-        return "Client: " + this.getClient() + "\n" + super.toString();
+        return "\n(Client Order) \nClient: " + this.getClient() + "\n" + super.toString();
     }
     
 

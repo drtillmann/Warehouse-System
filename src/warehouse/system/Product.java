@@ -23,7 +23,7 @@
 
       /* begin constructor*/
       
-      public Product(String productName, Manufacturer manufacturer, double price) {
+      public Product(String productName, Manufacturer manufacturer, int quantity, double price) {
         this.productName = productName;
 
         ProductList temp = ProductList.instance();
@@ -48,7 +48,7 @@
 
         this.manufacturer = manufacturer;
         this.price = price;
-        this.qty = 0;
+        this.qty = quantity;
       }
       /* end constructor */
       
