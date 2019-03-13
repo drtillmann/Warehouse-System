@@ -52,8 +52,12 @@
       }
       /* end constructor */
       
-      public void setQy(int qty){
+      public void setQty(int qty){
           this.qty = qty;
+      }
+      
+      public int getQty(){
+          return this.qty;
       }
 
       public Manufacturer getManufacturer() {
