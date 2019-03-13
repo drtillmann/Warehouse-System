@@ -19,6 +19,10 @@ public class OrderList implements Serializable {
       return orderList;
     }
   }
+  
+  public void addOrder(Order order){
+      orders.add(order);
+  }
 
   public boolean insertOrder(Order order) {
     orders.add(order);

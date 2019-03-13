@@ -220,7 +220,33 @@ public class UserInterface {
   
   
   public void placeOrder() {
-         System.out.println("Dummy Action");
+         String clientID = null;
+         String productID = null;
+         List<String> orderedProductIDs = new ArrayList<>();
+         String orderQty = null;
+         
+         String cont = null;
+         do{
+            do{
+               clientID = getToken("Enter the Client ID: ").trim();
+            }while(warehouse.searchClient(clientID) == null);
+
+            do{
+                productID = getToken("Enter the Product ID: ").trim();
+                orderedProductIDs.add(productID);
+            }while(warehouse.searchProduct(productID) == null);
+
+            orderQty = getToken("Enter the Order Qty of the Product: ").trim();
+
+            cont = getToken("Add Another Product to the Order?: Y|N").toUpperCase().trim();
+         }while(cont.equals("Y"));
+         
+         boolean result = warehouse.placeOrder(clientID, orderedProductIDs, orderQty);
+         
+         
+         
+         
+         
   }
   /*
   public void renewBooks() {

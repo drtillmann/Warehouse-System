@@ -129,4 +129,25 @@ public class ProductList implements Serializable {
       return products.iterator();
   }
   
+  /**
+   * Definition: Subtract the ordered quantity from the existing inventory.
+   * @param productID
+   * @param qty
+   * @return : 0 if fulfilled or # of waitlist quantity
+   */
+  public int subtractQty(String productID, int qty){
+      Product orderedProduct = this.search(productID);
+      int existingProductInventory = orderedProduct.getQty();
+      int orderedQty = qty;
+      int orderDifference = 0;
+      
+      if(existingProductInventory >= orderedQty){
+          orderedProduct.setQty(existingProductInventory - orderedQty);
+      }else{
+          orderDifference = Math.abs(existingProductInventory - orderedQty);
+          orderedProduct.setQty(0);
+      }
+      return orderDifference;
+  }
+  
 }

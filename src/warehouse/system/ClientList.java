@@ -29,6 +29,16 @@ public class ClientList implements Serializable {
      return clients.iterator();
   }
   
+  public Client search(String clientID){
+      for (Iterator iterator = clients.iterator(); iterator.hasNext(); ) {
+      Client client = (Client) iterator.next();
+      if (client.getId().equals(clientID)) {
+        return client;
+      }
+    }
+    return null;
+  } 
+  
   private void writeObject(java.io.ObjectOutputStream output) {
     try {
       output.defaultWriteObject();

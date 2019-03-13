@@ -32,7 +32,7 @@ public class WaitlistList implements Serializable{
         }
     }
     
-    public boolean insertWaitlist(Waitlist wl){
+    public boolean addWaitlist(Waitlist wl){
         this.waitlists.add(wl);
         return true;
     }

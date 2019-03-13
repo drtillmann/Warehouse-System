@@ -16,36 +16,21 @@
      * @author drtil
      */
     public class Order implements Serializable{
-        private Client client;
+        
         private List<Product> products = new ArrayList<>();
         private double balance;
         private String id;
         private static final String ORDER_STRING = "O";
 
         public Order(){
-
-        }
-
-        public Order(Client client){
             this.id = ORDER_STRING + (OrderIDServer.instance()).getId();
-            this.setClient(client);    
         }
-
-        public void setClient(Client client){
-            this.client = client;
-        }
-
-        public Client getClient(){
-            return this.client;
-        }
-
-        public void addProduct(Product product, int qty){
-            product.setQty(qty);
+        
+        public void addProduct(Product product){
             this.products.add(product);
-            this.setBalance(product, qty);
         }
 
-            private void setBalance(Product product, int qty){
+            public void setBalance(Product product, int qty){
                 this.balance += product.getPrice()*qty;
             }
 
@@ -72,11 +57,11 @@
         }
 
         public String toString(){
-            String strOrder = "Client: " + client + "\n Products: ";
+            String strProducts = "Order ID: " + this.getId() + "Balance: " + this.getBalance() + "\n Products: ";
 
             for(Product product : this.products){
-                strOrder += product + "\n";
+                strProducts += product + "\n";
             }        
-            return strOrder;
+            return strProducts;
         }
     }
