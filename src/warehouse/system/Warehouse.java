@@ -156,6 +156,10 @@ import javax.swing.JOptionPane;
           return manuList.getProductManufacturers(pid);
       }
 
+      
+      
+      
+      
       public boolean placeOrder(String clientID, List<String> productIDs, List<String> orderQty){
           Client client = clientList.search(clientID);
           ClientOrder clientOrder = new ClientOrder(client);
