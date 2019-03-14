@@ -176,7 +176,7 @@ import javax.swing.JOptionPane;
               Product manuOrderProduct = (Product)deepCopy(productInInventory);
               Product wlProduct = (Product)deepCopy(productInInventory);
               
-              JOptionPane.showMessageDialog(null, clientsOrderProduct.equals(productInInventory) + " | " +  manuOrderProduct.equals(productInInventory) + " | " + wlProduct.equals(productInInventory));
+              //JOptionPane.showMessageDialog(null, clientsOrderProduct.equals(productInInventory) + " | " +  manuOrderProduct.equals(productInInventory) + " | " + wlProduct.equals(productInInventory));
               
               int inventoryQty = productInInventory.getQty();
               int remainingOrderQty = 0;
