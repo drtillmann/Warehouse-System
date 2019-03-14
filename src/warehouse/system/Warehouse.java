@@ -156,6 +156,10 @@ import javax.swing.JOptionPane;
           return manuList.getProductManufacturers(pid);
       }
 
+      
+      
+      
+      
       public boolean placeOrder(String clientID, List<String> productIDs, List<String> orderQty){
           Client client = clientList.search(clientID);
           ClientOrder clientOrder = new ClientOrder(client);
@@ -168,15 +172,20 @@ import javax.swing.JOptionPane;
               String id = productIDs.get(i);
               int orderedQty = Integer.parseInt(orderQty.get(i));
               Product productInInventory = inventory.search(id);
+              Product clientsOrderProduct = (Product)deepCopy(productInInventory);
+              Product manuOrderProduct = (Product)deepCopy(productInInventory);
+              Product wlProduct = (Product)deepCopy(productInInventory);
+              
+              JOptionPane.showMessageDialog(null, clientsOrderProduct.equals(productInInventory) + " | " +  manuOrderProduct.equals(productInInventory) + " | " + wlProduct.equals(productInInventory));
+              
               int inventoryQty = productInInventory.getQty();
               int remainingOrderQty = 0;
-              Product clientsOrderProduct = (Product)deepCopy(productInInventory);
-              clientsOrderProduct.setQty(orderedQty);
               
-              Product manuOrderProduct = (Product)deepCopy(productInInventory);
+              clientsOrderProduct.setQty(orderedQty);
               manuOrderProduct.setQty(orderedQty);
+              
               clientOrder.addProduct(clientsOrderProduct);
-              manuOrder = new ManufacturerOrder(productInInventory, orderedQty);
+              manuOrder = new ManufacturerOrder(manuOrderProduct);
               orderList.addOrder(manuOrder);              
               
               if(inventoryQty > orderedQty){
@@ -184,13 +193,10 @@ import javax.swing.JOptionPane;
               }else{
                   remainingOrderQty = Math.abs(inventoryQty - orderedQty);
                   inventory.updateQty(id, 0);
-              }
-             
-              if(remainingOrderQty != 0){ // 0 = enough inventory to fulfill product ordered quantity
-                //Process waitlist here  
-                wl.addProduct(productInInventory, remainingOrderQty);
-                waitlistList.addWaitlist(wl);
-                noWaitlistsAdded = false;
+                  //Process waitlist here  
+                    wl.addProduct(wlProduct, remainingOrderQty);
+                    waitlistList.addWaitlist(wl);
+                    noWaitlistsAdded = false;
               }
           }
           orderList.addOrder(clientOrder);
