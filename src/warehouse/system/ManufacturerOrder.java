@@ -13,11 +13,10 @@ public class ManufacturerOrder extends Order{
     
     private Product product;
     
-    public ManufacturerOrder(Product product, int qty){
+    public ManufacturerOrder(Product product){
         super();
-        product.setQty(qty);
         this.setProduct(product);
-        this.setBalance(qty);
+        this.setBalance(product.getQty());
     }
     
     private void setProduct(Product product){
