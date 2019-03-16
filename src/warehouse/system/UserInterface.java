@@ -33,9 +33,10 @@ public class UserInterface {
   private static final int SHOW_MANUFACTURERS_PRODUCTS = 8;
   private static final int SHOW_PRODUCT_MANUFACTURERS = 9;
   private static final int PLACE_ORDER = 10;
-  private static final int SAVE = 11;
-  private static final int RETRIEVE = 12;
-  private static final int HELP = 13;
+  private static final int SHOW_WAITLISTED_ORDERS_BY_PRODUCTID = 11;
+  private static final int SAVE = 12;
+  private static final int RETRIEVE = 13;
+  private static final int HELP = 14;
   
   private UserInterface() {
     if (yesOrNo("Look for saved data and  use it?")) {
@@ -129,7 +130,8 @@ public class UserInterface {
     print(SHOW_MANUFACTURERS + " to print manufacturers");
     print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");
     print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");
-    print(PLACE_ORDER + "to place an order");
+    print(PLACE_ORDER + " to place an order");
+    print(SHOW_WAITLISTED_ORDERS_BY_PRODUCTID + " to print a list of waitlisted orders containing a product id");
     print(SAVE + " to save data");
     print(RETRIEVE + " to retrieve");
     print(HELP + " for help");
@@ -218,8 +220,8 @@ public class UserInterface {
          String productID = null;
          String orderQty = null;
          List<String> orderedProductIDs = new ArrayList<>();
-         List<String> orderedQty = new ArrayList<>();
-         
+         List<String> orderedQtys = new ArrayList<>();
+         Product validProduct;
          
          do{
                clientID = getToken("Enter the Client ID: ").trim();
@@ -228,21 +230,35 @@ public class UserInterface {
          do{
             do{
                 productID = getToken("Enter the Product ID: ").trim();
-                orderedProductIDs.add(productID);
-            }while(warehouse.searchProduct(productID) == null);
-
-            orderQty = getToken("Enter the Order Qty of the Product: ").trim();
-            orderedQty.add(orderQty);
+                validProduct = warehouse.searchProduct(productID);
+                if(validProduct != null){
+                    orderedProductIDs.add(productID);
+                    orderQty = getToken("Enter the Order Qty of the Product: ").trim();
+                    orderedQtys.add(orderQty);
+                }
+            }while(validProduct == null);
             
-         }while(!yesOrNo("Add Another Product to the Order?"));
+         }while(yesOrNo("Add Another Product to the Order?"));
          
-         boolean result = warehouse.placeOrder(clientID, orderedProductIDs, orderedQty);
+         boolean result = warehouse.placeOrder(clientID, orderedProductIDs, orderedQtys);
          
          if(result){
-             JOptionPane.showMessageDialog(null, "Order Filled 100%");
+             print("100% of the order was filled.");
          }else{
-             JOptionPane.showMessageDialog(null, "Order Added to Waitlist.");
+             print("Order Added to Waitlist List.");
          }
+         print("Manufacturer order(s) automatically placed.");
+  }
+  
+  public void showWaitlistedOrdersByProductID(){
+      String productID;
+      do{
+        productID = getToken("Enter the Product ID: ");
+      }while(warehouse.searchProduct(productID) == null);
+      Iterator waitlists = warehouse.getWaitlistedOrdersByProductID(productID);
+      while(waitlists.hasNext()){
+          print(waitlists.next().toString());
+      }
   }
   /*
   public void renewBooks() {
@@ -292,23 +308,7 @@ public class UserInterface {
       }
   }
 
-  /*
-  public void returnBooks() {
-      System.out.println("Dummy Action");
-  }
-  public void removeBooks() {
-      System.out.println("Dummy Action");   
-  }
-  public void placeHold() {
-      System.out.println("Dummy Action");   
-  }
-  public void removeHold() {
-      System.out.println("Dummy Action");   
-  }
-  public void processHolds() {
-      System.out.println("Dummy Action");   
-  }
-  */
+
   public void getTransactions() {
       System.out.println("Dummy Action");   
   }
@@ -350,15 +350,17 @@ public class UserInterface {
                                 break;
         case RETRIEVE:          retrieve();
                                 break;
-        case SHOW_CLIENTS:	showClients();
+        case SHOW_CLIENTS:	print("(Client List)"); showClients();
                                 break; 		
-        case SHOW_PRODUCTS:	showProducts();
+        case SHOW_PRODUCTS:	print("(Inventory)"); showProducts();
                                 break;
-        case SHOW_MANUFACTURERS: showManufacturers();
+        case SHOW_MANUFACTURERS: print("(Manufacturer List)"); showManufacturers();
                                 break;
-        case SHOW_MANUFACTURERS_PRODUCTS: showManuProducts();
+        case SHOW_MANUFACTURERS_PRODUCTS: print("(Manufacturer's Products)"); showManuProducts();
                                 break;
-        case SHOW_PRODUCT_MANUFACTURERS: showProductManufacturers();
+        case SHOW_PRODUCT_MANUFACTURERS: print("(Product's Manufacturers)"); showProductManufacturers();
+                                break;
+        case SHOW_WAITLISTED_ORDERS_BY_PRODUCTID: print("(Waitlisted Orders By Product ID)"); showWaitlistedOrdersByProductID();
                                 break;
         case PLACE_ORDER: placeOrder();
                                 break;

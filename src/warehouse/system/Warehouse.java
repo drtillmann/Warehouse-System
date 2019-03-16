@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
     import java.io.ObjectInputStream;
     import java.io.ObjectOutputStream;
     import java.io.Serializable;
+import java.util.ArrayList;
     import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -201,6 +202,20 @@ import javax.swing.JOptionPane;
           }
           orderList.addOrder(clientOrder);
           return noWaitlistsAdded;
+      }
+      
+      public Iterator getWaitlistedOrdersByProductID(String pid){
+        String productID = pid;
+        List<Waitlist> waitlistsContainingProduct = new ArrayList<>();
+        Iterator waitlists = this.getWaitlists();
+        while(waitlists.hasNext()){
+            Waitlist wl = (Waitlist)(waitlists.next());
+            if(wl.containsProduct(productID)){
+                //System.out.println(wl.toString());
+                waitlistsContainingProduct.add(wl);
+            }
+        }
+        return waitlistsContainingProduct.iterator();
       }
       
       public Iterator getOrders(){
