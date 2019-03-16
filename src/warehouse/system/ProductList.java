@@ -139,4 +139,14 @@ public class ProductList implements Serializable {
       orderedProduct.setQty(qty);
   }
   
+  public boolean productHasManufacturer(String manuID){
+      Iterator products = this.getProducts();
+      while(products.hasNext()){
+          Product p = (Product)products.next();
+          if(p.getManufacturer().getId().equals(manuID)){
+              return true;
+          }
+      }
+      return false;
+  }
 }

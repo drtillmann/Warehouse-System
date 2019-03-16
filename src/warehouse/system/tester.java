@@ -137,7 +137,7 @@ public class tester {
         
         print("*** TEST PLACING AN ORDER ***");
         
-        boolean orderFulfilled = warehouse.placeOrder(clientID, pIDs, pQtys);
+        boolean orderFulfilled = warehouse.placeClientOrder(clientID, pIDs, pQtys);
         
         if(!orderFulfilled){
             print("Ordered Product(s) added to Waitlist");
