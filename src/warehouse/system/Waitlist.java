@@ -29,6 +29,14 @@ public class Waitlist implements Serializable{
         this.orderID = id;
     }
     
+    public String getOrderID(){
+        return this.orderID;
+    }
+    
+    public String getWaitlistID(){
+        return this.waitlistID;
+    }
+    
     public void addProduct(Product backorderedProduct, int missingQty){
         backorderedProduct.setQty(missingQty);
         this.backorderedProducts.add(backorderedProduct);
@@ -47,6 +55,15 @@ public class Waitlist implements Serializable{
         return true;
     }
     
+    public boolean containsProduct(String pid){
+        for(Product p : this.backorderedProducts){
+            if(p.getID().equals(pid)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public String toString(){
         String sWaitlist =  "Waitlist ID: " + this.waitlistID + "\nOrder ID: " + this.orderID + "\nBackordered Products: ";
         for(Product p : this.backorderedProducts){
@@ -59,31 +76,3 @@ public class Waitlist implements Serializable{
         this.waitlistID = WAITLIST_STRING + String.valueOf(wid);
     }
 }
-
-/*
-class BackorderedProduct{
-    private Product product;
-    private int backorderedQty;
-    
-    public BackorderedProduct(Product p, int backorderedQty){
-        this.setProduct(p);
-        this.setBackorderedQty(backorderedQty);
-    }
-    
-    public void setProduct(Product p){
-        this.product = p;
-    }
-    
-    public void setBackorderedQty(int qty){
-        this.backorderedQty = qty;
-    }
-    
-    public Product getProduct(){
-        return this.product;
-    }
-    
-    public int getBackorderedQty(){
-        return this.backorderedQty;
-    }
-}
-*/
