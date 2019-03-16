@@ -14,7 +14,6 @@ package warehouse.system;
 import java.util.*;
 import java.text.*;
 import java.io.*;
-import javax.swing.JOptionPane;
 
 
 public class UserInterface {
@@ -32,11 +31,12 @@ public class UserInterface {
   private static final int SHOW_MANUFACTURERS = 7;
   private static final int SHOW_MANUFACTURERS_PRODUCTS = 8;
   private static final int SHOW_PRODUCT_MANUFACTURERS = 9;
-  private static final int PLACE_ORDER = 10;
-  private static final int SHOW_WAITLISTED_ORDERS_BY_PRODUCTID = 11;
-  private static final int SAVE = 12;
-  private static final int RETRIEVE = 13;
-  private static final int HELP = 14;
+  private static final int PLACE_CLIENT_ORDER = 10;
+  private static final int PLACE_MANUFACTURER_ORDER = 11;
+  private static final int SHOW_WAITLISTED_ORDERS_BY_PRODUCTID = 12;
+  private static final int SAVE = 13;
+  private static final int RETRIEVE = 14;
+  private static final int HELP = 15;
   
   private UserInterface() {
     if (yesOrNo("Look for saved data and  use it?")) {
@@ -130,7 +130,8 @@ public class UserInterface {
     print(SHOW_MANUFACTURERS + " to print manufacturers");
     print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");
     print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");
-    print(PLACE_ORDER + " to place an order");
+    print(PLACE_CLIENT_ORDER + " to place and process a client order");
+    print( PLACE_MANUFACTURER_ORDER + " to place an order to a manufacturer");
     print(SHOW_WAITLISTED_ORDERS_BY_PRODUCTID + " to print a list of waitlisted orders containing a product id");
     print(SAVE + " to save data");
     print(RETRIEVE + " to retrieve");
@@ -215,18 +216,16 @@ public class UserInterface {
   }
   
   
-  public void placeOrder() {
+  public void placeClientOrder() {
          String clientID = null;
          String productID = null;
          String orderQty = null;
          List<String> orderedProductIDs = new ArrayList<>();
          List<String> orderedQtys = new ArrayList<>();
          Product validProduct;
-         
          do{
                clientID = getToken("Enter the Client ID: ").trim();
             }while(warehouse.searchClient(clientID) == null);
-         
          do{
             do{
                 productID = getToken("Enter the Product ID: ").trim();
@@ -237,17 +236,29 @@ public class UserInterface {
                     orderedQtys.add(orderQty);
                 }
             }while(validProduct == null);
-            
          }while(yesOrNo("Add Another Product to the Order?"));
-         
-         boolean result = warehouse.placeOrder(clientID, orderedProductIDs, orderedQtys);
-         
+         boolean result = warehouse.placeClientOrder(clientID, orderedProductIDs, orderedQtys);
          if(result){
              print("100% of the order was filled.");
          }else{
              print("Order Added to Waitlist List.");
          }
          print("Manufacturer order(s) automatically placed.");
+  }
+  
+  public void placeManufacturerOrder(){
+      String manuID = null;
+      String productID = null;
+      String orderQty = null;
+      do{
+          manuID = getToken("Enter the Manufacturer ID:");
+      }while(!warehouse.manufacturerExists(manuID));
+      
+      do{
+          productID = getToken("Enter the Product ID:");
+      }while(warehouse.searchProduct(productID) == null && !warehouse.manufacturerContainsProduct(productID));
+      orderQty = getToken("Enter Order Qty:");
+      warehouse.placeManufacturerOrder(productID, orderQty);
   }
   
   public void showWaitlistedOrdersByProductID(){
@@ -362,7 +373,9 @@ public class UserInterface {
                                 break;
         case SHOW_WAITLISTED_ORDERS_BY_PRODUCTID: print("(Waitlisted Orders By Product ID)"); showWaitlistedOrdersByProductID();
                                 break;
-        case PLACE_ORDER: placeOrder();
+        case PLACE_CLIENT_ORDER: placeClientOrder();
+                                break;
+        case PLACE_MANUFACTURER_ORDER: placeManufacturerOrder();  
                                 break;
         case HELP:              help();
                                 break;

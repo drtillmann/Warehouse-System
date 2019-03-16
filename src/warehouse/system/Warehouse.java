@@ -156,15 +156,22 @@ import javax.swing.JOptionPane;
       public Iterator getProductManufacturers(String pid){
           return manuList.getProductManufacturers(pid);
       }
-
       
+      public boolean manufacturerContainsProduct(String pid){
+          Iterator manus = this.getManufacturers();
+          while(manus.hasNext()){
+              Manufacturer manu = (Manufacturer)manus.next();
+              if(manu.containsProduct(pid)){
+                  return true;
+              }
+          }
+          return false;
+      }
+           
       
-      
-      
-      public boolean placeOrder(String clientID, List<String> productIDs, List<String> orderQty){
+      public boolean placeClientOrder(String clientID, List<String> productIDs, List<String> orderQty){
           Client client = clientList.search(clientID);
           ClientOrder clientOrder = new ClientOrder(client);
-          ManufacturerOrder manuOrder;
           Waitlist wl = new Waitlist();
           wl.setOrderID(clientOrder.getId());
           boolean noWaitlistsAdded = true;
@@ -174,20 +181,13 @@ import javax.swing.JOptionPane;
               int orderedQty = Integer.parseInt(orderQty.get(i));
               Product productInInventory = inventory.search(id);
               Product clientsOrderProduct = (Product)deepCopy(productInInventory);
-              Product manuOrderProduct = (Product)deepCopy(productInInventory);
+              
               Product wlProduct = (Product)deepCopy(productInInventory);
-              
-              //JOptionPane.showMessageDialog(null, clientsOrderProduct.equals(productInInventory) + " | " +  manuOrderProduct.equals(productInInventory) + " | " + wlProduct.equals(productInInventory));
-              
               int inventoryQty = productInInventory.getQty();
               int remainingOrderQty = 0;
               
               clientsOrderProduct.setQty(orderedQty);
-              manuOrderProduct.setQty(orderedQty);
-              
-              clientOrder.addProduct(clientsOrderProduct);
-              manuOrder = new ManufacturerOrder(manuOrderProduct);
-              orderList.addOrder(manuOrder);              
+              clientOrder.addProduct(clientsOrderProduct);             
               
               if(inventoryQty > orderedQty){
                   inventory.updateQty(id, inventoryQty - orderedQty);
@@ -202,6 +202,14 @@ import javax.swing.JOptionPane;
           }
           orderList.addOrder(clientOrder);
           return noWaitlistsAdded;
+      }
+      
+      public void placeManufacturerOrder(String productID, String orderedQty){
+          ManufacturerOrder manuOrder;
+          Product manuOrderProduct = (Product)deepCopy(inventory.search(productID));
+          manuOrderProduct.setQty(Integer.parseInt(orderedQty));
+          manuOrder = new ManufacturerOrder(manuOrderProduct);
+          orderList.addOrder(manuOrder); 
       }
       
       public Iterator getWaitlistedOrdersByProductID(String pid){

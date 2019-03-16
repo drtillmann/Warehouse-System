@@ -66,6 +66,17 @@ public class Manufacturer implements Serializable {
       return false;
   }
   
+  public boolean containsProduct(String pid){
+      Iterator products = this.getProducts();
+      while(products.hasNext()){
+          Product p = (Product)products.next();
+          if(p.getID().equals(pid)){
+              return true;
+          }
+      }
+      return false;
+  }
+  
   
   public Iterator getProducts(){
       //return manuProducts.getProducts();
