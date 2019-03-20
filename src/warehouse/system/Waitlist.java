@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package warehouse.system;
+
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,6 +13,7 @@ public class Waitlist implements Serializable{
     
     private String waitlistID;
     private String orderID;
+    private List<Client> backorderedClients = new ArrayList<>();
     private List<Product> backorderedProducts = new ArrayList<>();
     public static final String WAITLIST_STRING = "W";
     
@@ -36,6 +32,15 @@ public class Waitlist implements Serializable{
     public String getWaitlistID(){
         return this.waitlistID;
     }
+   
+    public void addClient(Client backorderedClient, int missingQty){
+        backorderedClient.setQty(missingQty);
+        this.backorderedClients.add(backorderedClient);
+    } 
+    
+    public Iterator getBackorderedClients(){
+        return this.backorderedClients.iterator();
+    }
     
     public void addProduct(Product backorderedProduct, int missingQty){
         backorderedProduct.setQty(missingQty);
@@ -52,9 +57,25 @@ public class Waitlist implements Serializable{
                 return false;
             }
         }
+        
+        for(Client client : this.backorderedClients){
+            if(client.getQty() != 0){
+                return false;
+            }
+        }
+        
         return true;
     }
     
+      public boolean containsClient(String pid){
+        for(Client p : this.backorderedClients){
+            if(p.getID().equals(pid)){
+                return true;
+            }
+        }
+        return false;
+    }
+      
     public boolean containsProduct(String pid){
         for(Product p : this.backorderedProducts){
             if(p.getID().equals(pid)){
@@ -69,8 +90,12 @@ public class Waitlist implements Serializable{
         for(Product p : this.backorderedProducts){
             sWaitlist += "\n"+ p;
         }
+         for(Client p : this.backorderedClients){
+            sWaitlist += "\n"+ p;
+        }
         return sWaitlist;
     }
+    
     
     private void setWaitlistID(int wid){
         this.waitlistID = WAITLIST_STRING + String.valueOf(wid);
