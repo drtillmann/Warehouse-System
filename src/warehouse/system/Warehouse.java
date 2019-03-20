@@ -1,14 +1,14 @@
-
+package warehouse.system;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-    import java.io.FileInputStream;
-    import java.io.FileOutputStream;
-    import java.io.IOException;
-    import java.io.ObjectInputStream;
-    import java.io.ObjectOutputStream;
-    import java.io.Serializable;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-    import java.util.Iterator;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
 

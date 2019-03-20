@@ -1,3 +1,4 @@
+package warehouse.system;
 
 
 import java.util.*;
@@ -226,13 +227,12 @@ public class UserInterface {
                 }
             }while(validProduct == null);
          }while(yesOrNo("Add Another Product to the Order?"));
-         boolean result = warehouse.placeClientOrder(clientID, orderedProductIDs, orderedQtys);
-         if(result){
+         boolean orderFulfilled = warehouse.placeClientOrder(clientID, orderedProductIDs, orderedQtys);
+         if(orderFulfilled){
              print("100% of the order was filled.");
          }else{
              print("Order Added to Waitlist List.");
          }
-         print("Manufacturer order(s) automatically placed.");
   }
   
   public void placeManufacturerOrder(){

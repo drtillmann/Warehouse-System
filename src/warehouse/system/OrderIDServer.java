@@ -1,3 +1,4 @@
+package warehouse.system;
 
 import java.io.*;
 public class OrderIDServer implements Serializable {

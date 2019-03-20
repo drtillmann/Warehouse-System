@@ -1,5 +1,7 @@
+package warehouse.system;
 
 import java.io.*;
+
 public class ClientIdServer implements Serializable {
   private  int idCounter;
   private static ClientIdServer server;

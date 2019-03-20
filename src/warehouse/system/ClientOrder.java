@@ -1,3 +1,4 @@
+package warehouse.system;
 
 public class ClientOrder extends Order{
     
