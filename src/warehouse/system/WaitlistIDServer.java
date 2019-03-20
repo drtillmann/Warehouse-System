@@ -1,4 +1,4 @@
-
+package warehouse.system;
 import java.io.*;
 public class WaitlistIDServer implements Serializable {
   private  int idCounter;
