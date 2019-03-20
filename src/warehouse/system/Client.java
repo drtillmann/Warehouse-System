@@ -1,6 +1,3 @@
-package warehouse.system;
-
-
 import java.util.*;
 import java.io.*;
 public class Client implements Serializable {
@@ -49,4 +46,16 @@ public class Client implements Serializable {
     String string = "Client name: " + name + ", Address: " + address + ", ID: " + id + ", Phone " + phone;
     return string;
   }
+
+    int getQty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    Object getID() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void setQty(int missingQty) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -1,4 +1,3 @@
-package warehouse.system;
 
 import java.io.*;
 public class ProductIdServer implements Serializable {
