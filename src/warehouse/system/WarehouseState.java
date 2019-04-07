@@ -1,4 +1,4 @@
-package warehouse.system;
+//package warehouse.system;
 
 public abstract class WarehouseState {
   protected static WarehouseContext context;
