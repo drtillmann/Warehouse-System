@@ -19,23 +19,23 @@ import java.util.StringTokenizer;
  *
  * @author drtil
  */
-public class Managerstate extends WarehouseState{
+public class ManagerState extends WarehouseState{
     
     private static final int EXIT = 0;
     private static final int ASSIGN_PRODUCT = 1;
     private static final int UNASSIGN_PRODUCT = 2;
     private static final int HELP = 3;
-    private static Managerstate managerState;
+    private static ManagerState managerState;
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Warehouse warehouse;
     
-    private Managerstate(){
+    private ManagerState(){
         warehouse = Warehouse.instance();
     }
     
-    public static Managerstate instance(){
+    public static ManagerState instance(){
         if(managerState == null){
-            return managerState = new Managerstate();
+            return managerState = new ManagerState();
         }else{
             return managerState;
         }
