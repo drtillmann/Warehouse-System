@@ -126,27 +126,27 @@ public class UserInterface {
 
   public void help() {
     print("Enter a number between 0 and 20 as explained below:");
-    print(EXIT + " to Exit\n");
-    print(ADD_CLIENT + " to add a client");
-    print(ADD_MANUFACTURER + " to add a manufacturer");
-    print(ADD_PRODUCT + " to add products and assign them to a manufacturer");
-    print(UNASSIGN_PRODUCT + " to unassign a product from a manufacturer");
-    print(SHOW_CLIENTS + " to print clients");
-    print(SHOW_PRODUCTS + " to print products");
-    print(SHOW_MANUFACTURERS + " to print manufacturers");
-    print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");
-    print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");
-    print(PLACE_CLIENT_ORDER + " to place and process a client order");
-    print( PLACE_MANUFACTURER_ORDER + " to place an order to a manufacturer");
-    print(SHOW_WAITLISTED_ORDERS_BY_PRODUCTID + " to print a list of waitlisted orders containing a product id");
+    print(EXIT + " to Exit\n");//*
+    print(ADD_CLIENT + " to add a client");//clerk
+    print(ADD_MANUFACTURER + " to add a manufacturer");//manager
+    print(ADD_PRODUCT + " to add products and assign them to a manufacturer");//clerk
+    print(UNASSIGN_PRODUCT + " to unassign a product from a manufacturer");//manager, also assign product to manu
+    print(SHOW_CLIENTS + " to print clients");//clerk
+    print(SHOW_PRODUCTS + " to print products");//clerk
+    print(SHOW_MANUFACTURERS + " to print manufacturers");//clerk
+    print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");//clerk
+    print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");//clerk
+    print(PLACE_CLIENT_ORDER + " to place and process a client order");//client
+    print( PLACE_MANUFACTURER_ORDER + " to place an order to a manufacturer");//clerk
+    print(SHOW_WAITLISTED_ORDERS_BY_PRODUCTID + " to print a list of waitlisted orders containing a product id");//clerk
 	print(ACCEPT_CLIENT_PAYMENT + " to process a client payment on an order");
 	print(OUTSTANDING_BALANCE + " to list all clients with an outstanding balance.");
 	print(WAITLIST_ORDER_CLIENT + " to get a list of waitlisted orders for a client.");
 	print(ORDERS_PLACED_WITH_MANU + " to get a list of orders placed with a manufacturer.");
     print(RECEIVE_SHIPMENT + " to receive manufacturer shipment");
-    print(SAVE + " to save data");
-    print(RETRIEVE + " to retrieve");
-    print(HELP + " for help");
+    print(SAVE + " to save data");//clerk
+    print(RETRIEVE + " to retrieve");//clerk
+    print(HELP + " for help");//*
   }
 
   public void addClient() {
