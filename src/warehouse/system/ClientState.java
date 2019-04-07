@@ -21,22 +21,22 @@ import java.util.StringTokenizer;
  *
  * @author drtil
  */
-public class Clientstate extends WarehouseState{
+public class ClientState extends WarehouseState{
     
     private static final int EXIT = 0;
     private static final int PLACE_CLIENT_ORDER = 1;
     private static final int HELP = 2;
-    private static Clientstate clientState;
+    private static ClientState clientState;
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Warehouse warehouse;
     
-    private Clientstate(){
+    private ClientState(){
         warehouse = Warehouse.instance();
     }
     
-    public static Clientstate instance(){
+    public static ClientState instance(){
         if(clientState == null){
-            return clientState = new Clientstate();
+            return clientState = new ClientState();
         }else{
             return clientState;
         }
