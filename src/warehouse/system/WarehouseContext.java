@@ -1,6 +1,5 @@
-//package warehouse.system;
-
 import java.util.*;
+import java.text.*;
 import java.io.*;
 public class WarehouseContext {
   
@@ -70,34 +69,34 @@ public class WarehouseContext {
   { return userID;}
 
   private WarehouseContext() { //constructor
-    System.out.println("In Warehousecontext constructor");
     if (yesOrNo("Look for saved data and  use it?")) {
       retrieve();
     } else {
       warehouse = Warehouse.instance();
     }
     // set up the FSM and transition table;
-    states = new WarehouseState[3];
+    states = new WarehouseState[4];
     states[0] = ClerkState.instance();
     states[1] = ClientState.instance(); 
     states[2]=  LoginState.instance();
 	states[3] = ManagerState.instance();
-    nextState = new int[4][4];
-	//				Clerkstatelogin   Clientstatelogin   managerstatelogin   exit   logout   wasClerkLogout   wasManagerLogout
-	// Clerkstate                   0                  1                  -2                   -2      2            -2               3                 
-	// ClientState                  -2                 1                  -2                   -2      2             1               0
-	// Loginstate                   0                  1                   3                   -1     -2            -2              -2
-	// ManagerState                 0                  0                   3                   -2      2            -2              -2
+    nextState = new int[4][7];
+	//				ClerkStatelogin   Clientstatelogin   managerstatelogin   exit   logout   wasClerkLogout   wasManagerLogout
+	// ClerkState          0                  1                  -2           -2      2            -2               3                 
+	// ClientState         -2                 1                  -2           -2      2             1               0
+	// LoginState          0                  1                   3           -1     -2            -2              -2
+	// ManagerState        0                  0                   3           -2      2            -2              -2
 	
-    nextState[0][0] = 0;    nextState[0][1] = 1;nextState[0][2] = -2;   nextState[0][2] = -2;nextState[0][2] = 2;   nextState[0][2] = -2;   nextState[0][2] = 3;
-    nextState[1][0] = -2;   nextState[1][1] = 1;nextState[1][2] = -2;   nextState[0][2] = -2;nextState[0][2] = 2;   nextState[0][2] = 1;    nextState[0][2] = 0;
-    nextState[2][0] = 0;    nextState[2][1] = 1;nextState[2][2] = 3;    nextState[0][2] = -1;nextState[0][2] = -2;  nextState[0][2] = -2;   nextState[0][2] = -2;
-    nextState[3][0] = 0;    nextState[3][1] = 0;nextState[3][2] = 3;    nextState[0][2] = -2;nextState[0][2] = 2;   nextState[0][2] = -2;   nextState[0][2] = -2;
+    nextState[0][0] = 0;nextState[0][1] = 1;nextState[0][2] = -2;nextState[0][3] = -2;nextState[0][4] = 2;nextState[0][5] = -2;nextState[0][6] = 3;
+    nextState[1][0] = -2;nextState[1][1] = 1;nextState[1][2] = -2;nextState[1][3] = -2;nextState[1][4] = 2;nextState[1][5] = 0;nextState[1][6] = 0;
+    nextState[2][0] = 0;nextState[2][1] = 1;nextState[2][2] = 3;nextState[2][3] = -1;nextState[2][4] = -2;nextState[2][5] = -2;nextState[2][6] = -2;
+	nextState[3][0] = 0;nextState[3][1] = 0;nextState[3][2] = 3;nextState[3][3] = -2;nextState[3][4] = 2;nextState[3][5] = -2;nextState[3][6] = -2;
     currentState = 2;
   }
 
   public void changeState(int transition)
   {
+	 
 	if (currentState == 0 && nextState[currentState][transition] == 1)
 		wasClerk = true;
 	if (currentState == 3 && nextState[currentState][transition] == 0)
@@ -120,8 +119,8 @@ public class WarehouseContext {
     currentState = nextState[currentState][transition];
     if (currentState == -2) 
       {System.out.println("Error has occurred"); terminate();}
-    if (currentState == -1) 
-      terminate();
+    if (currentState == -1) { System.out.println("here\n");
+      terminate();}
     //System.out.println("current state " + currentState + " \n \n ");
 	
     states[currentState].run();
@@ -141,7 +140,6 @@ public class WarehouseContext {
 
   public static WarehouseContext instance() {
     if (context == null) {
-       System.out.println("calling constructor");
       context = new WarehouseContext();
     }
     return context;
@@ -152,7 +150,8 @@ public class WarehouseContext {
   }
   
   public static void main (String[] args){
-    WarehouseContext.instance().process(); 
+    WarehouseContext.instance().process();
+     
   }
 
 

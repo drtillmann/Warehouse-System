@@ -92,6 +92,10 @@ import javax.swing.JOptionPane;
           return false;
       }
 
+	  public Client searchMembership(String memberId) {
+		return clientList.search(memberId);
+	  }
+
 
       public boolean productExists(String pid){
           if(inventory.productExists(pid)) return true;

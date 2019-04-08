@@ -136,19 +136,7 @@ public class ClientState extends WarehouseState{
     }
     
     public void logout(){
-        if ((WarehouseContext.instance()).getLogin() == WarehouseContext.IsClient)
-        { //stem.out.println(" going to clerk \n ");
-            (WarehouseContext.instance()).changeState(4); // exit with a code 4
-        }else{ 
-            (WarehouseContext.instance()).changeState(2); // exit code 2, indicates error
-        }
-        /*
-        else if (WarehouseContext.instance().getLogin() == WarehouseContext.IsUser)
-           {  //stem.out.println(" going to login \n");
-            (WarehouseContext.instance()).changeState(0); // exit with a code 2
-           }
-        else (WarehouseContext.instance()).changeState(2); // exit code 2, indicates error
-        */
+        WarehouseContext.instance().changeState(4); 
     }
  
       public void placeClientOrder() {
