@@ -20,7 +20,7 @@ public class WaitlistList implements Serializable{
     private List<Waitlist> waitlists = new ArrayList<>();
     private static WaitlistList waitlistList;
     
-    private WaitlistList(){
+    public WaitlistList(){
         
     }
     

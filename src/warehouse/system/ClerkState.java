@@ -1,62 +1,48 @@
-//package warehouse.system;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-/**
- *
- * @author drtil
- */
 
 import java.util.*;
 import java.text.*;
 import java.io.*;
-
-
-public class UserInterface {
-  private static UserInterface userInterface;
+public class ClerkState extends WarehouseState {
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   private static Warehouse warehouse;
-  
+  private WarehouseContext context;
+  private static ClerkState instance;
   private static final int EXIT = 0;
   private static final int ADD_CLIENT = 1;
-  private static final int ADD_MANUFACTURER = 2;
-  private static final int ADD_PRODUCT = 3;
-  private static final int UNASSIGN_PRODUCT = 4;
-  private static final int SHOW_CLIENTS = 5;
-  private static final int SHOW_PRODUCTS = 6;
-  private static final int SHOW_MANUFACTURERS = 7;
-  private static final int SHOW_MANUFACTURERS_PRODUCTS = 8;
-  private static final int SHOW_PRODUCT_MANUFACTURERS = 9;
-  private static final int PLACE_CLIENT_ORDER = 10;
-  private static final int PLACE_MANUFACTURER_ORDER = 11;
-  private static final int SHOW_WAITLISTED_ORDERS_BY_PRODUCTID = 12;
-  private static final int ACCEPT_CLIENT_PAYMENT = 13;
-  private static final int OUTSTANDING_BALANCE = 14;
-  private static final int WAITLIST_ORDER_CLIENT = 15;
-  private static final int ORDERS_PLACED_WITH_MANU = 16;
-  private static final int RECEIVE_SHIPMENT = 17;
-  private static final int SAVE = 18;
-  private static final int RETRIEVE = 19;
-  private static final int HELP = 20;
-  
-  
-  private UserInterface() {
-    if (yesOrNo("Look for saved data and  use it?")) {
-      retrieve();
-    } else {
+  private static final int ADD_PRODUCT = 2;
+  private static final int SHOW_CLIENTS = 3;
+  private static final int SHOW_PRODUCTS = 4;
+  private static final int SHOW_MANUFACTURERS = 5;
+  private static final int SHOW_MANUFACTURERS_PRODUCTS = 6;
+  private static final int SHOW_PRODUCT_MANUFACTURERS = 7;
+  private static final int PLACE_MANUFACTURER_ORDER = 8;	
+  private static final int SHOW_WAITLISTED_ORDERS_BY_PRODUCTID = 9;
+  private static final int ACCEPT_CLIENT_PAYMENT = 10;
+  private static final int OUTSTANDING_BALANCE = 11;
+  private static final int WAITLIST_ORDER_CLIENT = 12;
+  private static final int ORDERS_PLACED_WITH_MANU = 13;
+  private static final int RECEIVE_SHIPMENT = 14;
+  private static final int SAVE = 15;
+  private static final int RETRIEVE = 16;
+  private static final int CLIENTMENU = 17;
+  private static final int HELP = 18;
+  private ClerkState() {
+      super();
       warehouse = Warehouse.instance();
-    }
+      //context = WarehouseContext.instance();
   }
-  public static UserInterface instance() {
-    if (userInterface == null) {
-      return userInterface = new UserInterface();
-    } else {
-      return userInterface;
+
+  public static ClerkState instance() {
+    if (instance == null) {
+      instance = new ClerkState();
     }
+    return instance;
   }
   
   public void print(String val){
@@ -77,7 +63,6 @@ public class UserInterface {
       }
     } while (true);
   }
- 
   private boolean yesOrNo(String prompt) {
     String more = getToken(prompt + " (Y|y)[es] or anything else for no");
     if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
@@ -85,8 +70,6 @@ public class UserInterface {
     }
     return true;
   }
-  
-  
   public int getNumber(String prompt) {
     do {
       try {
@@ -125,29 +108,28 @@ public class UserInterface {
   }
 
   public void help() {
-    print("Enter a number between 0 and 20 as explained below:");
-    print(EXIT + " to Exit\n");//*
-    print(ADD_CLIENT + " to add a client");//clerk
-    print(ADD_MANUFACTURER + " to add a manufacturer");//manager
-    print(ADD_PRODUCT + " to add products and assign them to a manufacturer");//clerk
-    print(UNASSIGN_PRODUCT + " to unassign a product from a manufacturer");//manager, also assign product to manu
-    print(SHOW_CLIENTS + " to print clients");//clerk
-    print(SHOW_PRODUCTS + " to print products");//clerk
-    print(SHOW_MANUFACTURERS + " to print manufacturers");//clerk
-    print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");//clerk
-    print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");//clerk
-    print(PLACE_CLIENT_ORDER + " to place and process a client order");//client
-    print( PLACE_MANUFACTURER_ORDER + " to place an order to a manufacturer");//clerk
-    print(SHOW_WAITLISTED_ORDERS_BY_PRODUCTID + " to print a list of waitlisted orders containing a product id");//clerk
-	print(ACCEPT_CLIENT_PAYMENT + " to process a client payment on an order");
-	print(OUTSTANDING_BALANCE + " to list all clients with an outstanding balance.");
-	print(WAITLIST_ORDER_CLIENT + " to get a list of waitlisted orders for a client.");
-	print(ORDERS_PLACED_WITH_MANU + " to get a list of orders placed with a manufacturer.");
+    print("Enter a number between 0 and 18 as explained below:");
+    print(EXIT + " to Exit\n");
+    print(ADD_CLIENT + " to add a client");
+    print(ADD_PRODUCT + " to add products and assign them to a manufacturer");
+    print(SHOW_CLIENTS + " to print clients");
+    print(SHOW_PRODUCTS + " to print products");
+    print(SHOW_MANUFACTURERS + " to print manufacturers");
+    print(SHOW_MANUFACTURERS_PRODUCTS + " to print the specified manufacturer's products");
+    print(SHOW_PRODUCT_MANUFACTURERS + " to print the specified product's manufacturers");
+    print(PLACE_MANUFACTURER_ORDER + " to place an order to a manufacturer");
+    print(SHOW_WAITLISTED_ORDERS_BY_PRODUCTID + " to print a list of waitlisted orders containing a product id");
+    print(ACCEPT_CLIENT_PAYMENT + " to process a client payment on an order");
+    print(OUTSTANDING_BALANCE + " to list all clients with an outstanding balance.");
+    print(WAITLIST_ORDER_CLIENT + " to get a list of waitlisted orders for a client.");
+    print(ORDERS_PLACED_WITH_MANU + " to get a list of orders placed with a manufacturer.");
     print(RECEIVE_SHIPMENT + " to receive manufacturer shipment");
-    print(SAVE + " to save data");//clerk
-    print(RETRIEVE + " to retrieve");//clerk
-    print(HELP + " for help");//*
+    print(SAVE + " to save data");
+    print(RETRIEVE + " to retrieve");
+    print(CLIENTMENU + " to become a client");
+    print(HELP + " for help");
   }
+
 
   public void addClient() {
     String name = getToken("Enter client name");
@@ -161,7 +143,7 @@ public class UserInterface {
     System.out.println(result);
   }
 
-  public void addProducts() {
+   public void addProducts() {
     Product result;
     do {
       String name = getToken("Enter Product Name:");
@@ -171,7 +153,7 @@ public class UserInterface {
       if(warehouse.manufacturerExists(manuID)){
         result = warehouse.addProduct(name, manuID, quantity, price);
         if (result != null) {
-          assignProduct(result.getID(), manuID);
+          warehouse.assignProduct(result.getID(), manuID);
           System.out.println(result);
       } else {
         System.out.println("Product could not be added");
@@ -182,123 +164,20 @@ public class UserInterface {
       }
     } while (true);
   }
-  
-  public void addManufacturer(){
-      String name = getToken("Enter Manufacturer Name: ");
-      Manufacturer result = warehouse.addManufacturer(name);
-      if(result != null){
-          System.out.println(result);
-      }else{
-          System.out.println("Manufacturer could not be added.");
-      }
-  }
-  
-  private void assignProduct(String pid, String mid){
-      
-      int result = warehouse.assignProduct(pid, mid);
-      switch(result){
-          case 1:
-              print("Could not find the Product associated with ID: " + pid);
-              break;
-          case 2:
-              print("Could not find the Manufacturer associated with ID: " + mid);
-              break;
-          case 3:
-              print("Product added to to the Manufacturer");
-              break;       
-      }
-  }
-  
-  public void unassignProduct(){
-    String productID = getToken("Enter the Product ID: ");
-    String manuID = getToken("Enter the Manufacturer's ID: ");
-    if(!warehouse.manufacturerExists(manuID)){
-        print("The Manufacturer ID " + manuID + " does not exist.");
-    }else if(!warehouse.productExists(productID)){
-        print("The Product ID " + productID + " does not exist.");
-    }else{
-        if(warehouse.unassignProduct(productID, manuID)){
-              print("Product " + productID + " removed from Manufacturer " + manuID);
-        }else{
-            print("The Prooduct was not removed.");
-        }
-    }
-  }
-  
-  
-  public void placeClientOrder() {
-         String clientID = null;
-         String productID = null;
-         String orderQty = null;
-         List<String> orderedProductIDs = new ArrayList<>();
-         List<String> orderedQtys = new ArrayList<>();
-         Product validProduct;
-         do{
-               clientID = getToken("Enter the Client ID: ").trim();
-            }while(warehouse.searchClient(clientID) == null);
-         do{
-            do{
-                productID = getToken("Enter the Product ID: ").trim();
-                validProduct = warehouse.searchProduct(productID);
-                if(validProduct != null){
-                    orderedProductIDs.add(productID);
-                    orderQty = getToken("Enter the Order Qty of the Product: ").trim();
-                    orderedQtys.add(orderQty);
-                }
-            }while(validProduct == null);
-         }while(yesOrNo("Add Another Product to the Order?"));
-         boolean result = warehouse.placeClientOrder(clientID, orderedProductIDs, orderedQtys);
-         if(result){
-             print("100% of the order was filled.");
-         }else{
-             print("Order Added to Waitlist List.");
-         }
-         
-  }
-  
-  public void placeManufacturerOrder(){
-      String manuID = null;
-      String productID = null;
-      String orderQty = null;
-      do{
-          manuID = getToken("Enter the Manufacturer ID:");
-      }while(!warehouse.manufacturerExists(manuID));
-      
-      do{
-          productID = getToken("Enter the Product ID:");
-      }while(warehouse.searchProduct(productID) == null && !warehouse.manufacturerContainsProduct(productID));
-      orderQty = getToken("Enter Order Qty:");
-      warehouse.placeManufacturerOrder(productID, orderQty);
-  }
-  
-  public void showWaitlistedOrdersByProductID(){
-      String productID;
-      do{
-        productID = getToken("Enter the Product ID: ");
-      }while(warehouse.searchProduct(productID) == null);
-      Iterator waitlists = warehouse.getWaitlistedOrdersByProductID(productID);
-      while(waitlists.hasNext()){
-          print(waitlists.next().toString());
-      }
-  }
-  /*
-  public void renewBooks() {
-      System.out.println("Dummy Action");
-  }
-*/
-  public void showProducts() {
-      Iterator allProducts = warehouse.getProducts();
-      while (allProducts.hasNext()){
-	  Product product = (Product)(allProducts.next());
-          System.out.println(product.toString());
-      }
-  }
-
-  public void showClients() {
+ 
+   public void showClients() {
       Iterator allClients = warehouse.getClients();
       while (allClients.hasNext()){
 	  Client client = (Client)(allClients.next());
           System.out.println(client.toString());
+      }
+  }
+  
+   public void showProducts() {
+      Iterator allProducts = warehouse.getProducts();
+      while (allProducts.hasNext()){
+	  Product product = (Product)(allProducts.next());
+          System.out.println(product.toString());
       }
   }
   
@@ -329,6 +208,33 @@ public class UserInterface {
       }
   }
 
+
+   public void placeManufacturerOrder(){
+      String manuID = null;
+      String productID = null;
+      String orderQty = null;
+      do{
+          manuID = getToken("Enter the Manufacturer ID:");
+      }while(!warehouse.manufacturerExists(manuID));
+      
+      do{
+          productID = getToken("Enter the Product ID:");
+      }while(warehouse.searchProduct(productID) == null && !warehouse.manufacturerContainsProduct(productID));
+      orderQty = getToken("Enter Order Qty:");
+      warehouse.placeManufacturerOrder(productID, orderQty);
+  }
+  
+   public void showWaitlistedOrdersByProductID(){
+      String productID;
+      do{
+        productID = getToken("Enter the Product ID: ");
+      }while(warehouse.searchProduct(productID) == null);
+      Iterator waitlists = warehouse.getWaitlistedOrdersByProductID(productID);
+      while(waitlists.hasNext()){
+          print(waitlists.next().toString());
+      }
+  }
+  
   public void acceptPayment(){
 	  Scanner s=new Scanner(System.in);
 	 
@@ -342,15 +248,6 @@ public class UserInterface {
   public void clientsWithOutstandingBalance(){
 	  warehouse.outstandingBalance();
   }
-
-  public void getTransactions() {
-      System.out.println("Dummy Action");   
-  }
-  
-  public void ordersWithManu(){
-	  String mid=getToken("Please enter the mID of the manufacturer to see their orders");
-	  warehouse.getManuOrders(mid);
-  }
   
   public void waitlistedOrdersForClient(){
 	  String cid=getToken("Please enter the cID of the client to see their waitlisted orders.");
@@ -358,7 +255,11 @@ public class UserInterface {
 
   }
   
-  // Within UserInterface 
+   public void ordersWithManu(){
+	  String mid=getToken("Please enter the mID of the manufacturer to see their orders");
+	  warehouse.getManuOrders(mid);
+  }
+  
   public void receiveOrder(Order order){
       warehouse.receiveOrder(order);
       print("Shipment successfully received.");
@@ -375,15 +276,7 @@ public class UserInterface {
         print("Order was not found.");
       }
   }
-  //
   
-  private void save() {
-    if (warehouse.save()) {
-      System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
-    } else {
-      System.out.println(" There has been an error in saving \n" );
-    }
-  }
   private void retrieve() {
     try {
       Warehouse tempWarehouse = Warehouse.retrieve();
@@ -398,6 +291,35 @@ public class UserInterface {
       cnfe.printStackTrace();
     }
   }
+  
+  
+  private void save() {
+    if (warehouse.save()) {
+      System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
+    } else {
+      System.out.println(" There has been an error in saving \n" );
+    }
+  }
+  
+  
+
+  public void clientMenu()
+  {
+    String clerkID = getToken("Please input the user id: ");
+    if (Warehouse.instance().searchMembership(clerkID) != null){
+      (WarehouseContext.instance()).setClient(clerkID);      
+      (WarehouseContext.instance()).changeState(1);
+    }
+    else 
+      System.out.println("Invalid user id."); 
+  }
+
+  public void logout()
+  {
+    (WarehouseContext.instance()).changeState(4); // exit with a code 0
+  }
+ 
+
   public void process() {
     int command;
     help();
@@ -406,11 +328,7 @@ public class UserInterface {
         case ADD_CLIENT:        addClient();
                                 break;
         case ADD_PRODUCT:       addProducts();
-                                break;
-        case ADD_MANUFACTURER:  addManufacturer();
-                                break;                      
-        case UNASSIGN_PRODUCT:  unassignProduct();
-                                break;
+                                break;                    
         case SAVE:              save();
                                 break;
         case RETRIEVE:          retrieve();
@@ -427,8 +345,6 @@ public class UserInterface {
                                 break;
         case SHOW_WAITLISTED_ORDERS_BY_PRODUCTID: print("(Waitlisted Orders By Product ID)"); showWaitlistedOrdersByProductID();
                                 break;
-        case PLACE_CLIENT_ORDER: placeClientOrder();
-                                break;
         case PLACE_MANUFACTURER_ORDER: placeManufacturerOrder();  
                                 break;
         case HELP:              help();
@@ -443,11 +359,13 @@ public class UserInterface {
 								break;
 		case WAITLIST_ORDER_CLIENT: waitlistedOrdersForClient();
 								break;
+		case CLIENTMENU:          clientMenu();
+                                break;
       }
     }
+    logout();
   }
-  public static void main(String[] s) {
-    UserInterface.instance().process();
+  public void run() {
+    process();
   }
 }
-

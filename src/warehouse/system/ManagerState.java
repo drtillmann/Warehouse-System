@@ -24,10 +24,14 @@ public class ManagerState extends WarehouseState{
     private static final int EXIT = 0;
     private static final int ASSIGN_PRODUCT = 1;
     private static final int UNASSIGN_PRODUCT = 2;
-    private static final int HELP = 3;
+    private static final int ADD_MANUFACTURER = 3;
+    private static final int MANAGER_AS_CLERK = 4;
+    private static final int HELP = 5;
     private static ManagerState managerState;
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Warehouse warehouse;
+    
+    Security security = new Security();
     
     private ManagerState(){
         warehouse = Warehouse.instance();
@@ -107,11 +111,18 @@ public class ManagerState extends WarehouseState{
         } while (true);
     }
     
+    public void manAsClerk(){
+		WarehouseContext.instance().changeState(0); 
+	}
+    
+    
     public void help() {
         print("Enter a number between " + EXIT + " and " + HELP + " as explained below:");
         print(EXIT + " to Exit\n");
         print(ASSIGN_PRODUCT + " to assign a product to a manufacturer.");
         print(UNASSIGN_PRODUCT + " to unassign a product from a manufacturer.");
+        print(ADD_MANUFACTURER + " to add a manufacturer");
+        print(MANAGER_AS_CLERK + " to become a clerk.");
         print(HELP + " for help");
     }
     
@@ -127,6 +138,10 @@ public class ManagerState extends WarehouseState{
                                     break;
             case HELP:              help();
                                     break;
+            case MANAGER_AS_CLERK: manAsClerk();
+                                    break;
+            case ADD_MANUFACTURER: addManufacturer();
+                                    break;
           }
         }
         logout();
@@ -138,18 +153,15 @@ public class ManagerState extends WarehouseState{
     }
     
     public void logout(){
-        if ((WarehouseContext.instance()).getLogin() == WarehouseContext.IsManager)
-        { //stem.out.println(" going to clerk \n ");
-          (WarehouseContext.instance()).changeState(1); // exit with a code 1
-        }
-        else if (WarehouseContext.instance().getLogin() == WarehouseContext.IsUser)
-        {  //stem.out.println(" going to login \n");
-         (WarehouseContext.instance()).changeState(0); // exit with a code 2
-        }
-        else (WarehouseContext.instance()).changeState(2); // exit code 2, indicates error
+		WarehouseContext.instance().changeState(4); 
     }
     
     public void assignProduct(){
+		String managerPass = getToken("Please input the manager password: ");  
+		
+		while(security.verifyManager(managerPass) == false){
+			managerPass = getToken("Incorrect password, please try again: ");
+		}
         String productID;
         String manufacturerID;
         do{
@@ -175,6 +187,11 @@ public class ManagerState extends WarehouseState{
     }
     
     public void unassignProduct(){
+		String managerPass = getToken("Please input the manager password: ");  
+		
+		while(security.verifyManager(managerPass) == false){
+			managerPass = getToken("Incorrect password, please try again: ");
+		}
         String productID;
         String manuID;
         do{
@@ -191,5 +208,20 @@ public class ManagerState extends WarehouseState{
             print("The Prooduct was not removed.");
         }
         
+    }
+    
+    public void addManufacturer(){
+		String managerPass = getToken("Please input the manager password: ");  
+		
+		while(security.verifyManager(managerPass) == false){
+			managerPass = getToken("Incorrect password, please try again: ");
+		}
+        String name = getToken("Enter Manufacturer Name: ");
+        Manufacturer result = warehouse.addManufacturer(name);
+        if(result != null){
+            System.out.println(result);
+        }else{
+            System.out.println("Manufacturer could not be added.");
+        }
     }
 }

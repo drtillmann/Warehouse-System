@@ -16,7 +16,7 @@
      * @author drtil
      */
     public class Order implements Serializable{
-        private static final long serialVersionUID = 1L;
+        
         private List<Product> products = new ArrayList<>();
         private double balance;
         private String id;

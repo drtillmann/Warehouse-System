@@ -1,5 +1,3 @@
-//package warehouse.system;
-
 public abstract class WarehouseState {
   protected static WarehouseContext context;
   protected WarehouseState() {

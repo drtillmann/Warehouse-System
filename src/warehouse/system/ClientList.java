@@ -29,15 +29,16 @@ public class ClientList implements Serializable {
      return clients.iterator();
   }
   
-  public Client search(String clientID){
-      for (Iterator iterator = clients.iterator(); iterator.hasNext(); ) {
-      Client client = (Client) iterator.next();
-      if (client.getId().equals(clientID)) {
-        return client;
+  public Client search(String memberId) {
+    for (Iterator iterator = clients.iterator(); iterator.hasNext(); ) {
+      Client member = (Client) iterator.next();
+      if (member.getId().equals(memberId)) {
+        return member;
       }
     }
     return null;
-  } 
+	}
+    
   
   private void writeObject(java.io.ObjectOutputStream output) {
     try {
@@ -47,6 +48,8 @@ public class ClientList implements Serializable {
       ioe.printStackTrace();
     }
   }
+  
+
   
   private void readObject(java.io.ObjectInputStream input) {
     try {
